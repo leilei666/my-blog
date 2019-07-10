@@ -7,17 +7,17 @@
   
   <title>博客网 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="大家好啊！">
+  <meta name="description" content="大家好啊！ public static String getNowLocalDate(String formatter){     LocalDate localDate = LocalDate.now();     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);     return lo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客网">
 <meta property="og:url" content="https://leilei666.github.io/my-blog/2019/07/10/博客网/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="大家好啊！">
+<meta property="og:description" content="大家好啊！ public static String getNowLocalDate(String formatter){     LocalDate localDate = LocalDate.now();     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);     return lo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-10T10:46:37.089Z">
+<meta property="og:updated_time" content="2019-07-10T11:27:24.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博客网">
-<meta name="twitter:description" content="大家好啊！">
+<meta name="twitter:description" content="大家好啊！ public static String getNowLocalDate(String formatter){     LocalDate localDate = LocalDate.now();     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);     return lo">
   
     <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -87,11 +87,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>大家好啊！</p>
+<pre><code>public static String getNowLocalDate(String formatter){
+    LocalDate localDate = LocalDate.now();
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);
+    return localDate.format(dateTimeFormatter);
+}
 
+public static String getNowLocalTime(String formatter){
+    LocalTime localTime = LocalTime.now();
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(formatter);
+    return localTime.format(timeFormatter);
+}</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjxx5nzd200028sw1tlwdcap4" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjxx5u2en0001bgw1wiizq80d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -99,15 +109,6 @@
   
     
 <nav id="article-nav">
-  
-    <a href="/my-blog/2019/07/10/测试1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
   
     <a href="/my-blog/2019/07/09/测试/" id="article-nav-older" class="article-nav-link-wrap">
@@ -147,10 +148,6 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/my-blog/2019/07/10/测试1/">(no title)</a>
-          </li>
         
           <li>
             <a href="/my-blog/2019/07/10/博客网/">博客网</a>
