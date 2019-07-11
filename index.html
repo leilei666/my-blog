@@ -84,34 +84,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一.什么是Stream?</p>
-<p>   Stream 中文称为 “流”，通过将集合转换为这么一种叫做 “流” 的元素序列，通过声明性方式，能够对集合中的每个元素进行一系列并行或串行的<br>流水线操作。</p>
-<p>二.流操作</p>
-<p>   整个流操作就是一条流水线，将元素放在流水线上一个个地进行处理。其中数据源便是原始集合，然后将如 List 的集合转换为 Stream 类型的流，并对流进行一系列的中间操作，比如过滤保留部分元素、对元素进行排序、类型转换等；最后再进行一个终端操作，可以把 Stream 转换回集合类型，也可以直接对其中的各个元素进行处理，比如打印、比如计算总数、计算最大值等等.</p>
-<p>三.一般实现方法</p>
-<p>   首先我们先创建一个 Person 泛型的 List</p>
+        <h2 id="一-什么是Stream"><a href="#一-什么是Stream" class="headerlink" title="一.什么是Stream?"></a>一.什么是Stream?</h2><p>Stream 中文称为 “流”，通过将集合转换为这么一种叫做 “流” 的元素序列，通过声明性方式，能够对集合中的每个元素进行一系列并行或串行的<br>流水线操作。</p>
+<h2 id="二-流操作"><a href="#二-流操作" class="headerlink" title="二.流操作"></a>二.流操作</h2><p>****整个流操作就是一条流水线，将元素放在流水线上一个个地进行处理。其中数据源便是原始集合，然后将如 List 的集合转换为 Stream 类型的流，并对流进行一系列的中间操作，比如过滤保留部分元素、对元素进行排序、类型转换等；最后再进行一个终端操作，可以把 Stream 转换回集合类型，也可以直接对其中的各个元素进行处理，比如打印、比如计算总数、计算最大值等等.</p>
+<h2 id="三-一般实现方法"><a href="#三-一般实现方法" class="headerlink" title="三.一般实现方法"></a>三.一般实现方法</h2><p>   首先我们先创建一个 Person 泛型的 List</p>
 <pre><code>List&lt;Person&gt; list = new ArrayList&lt;&gt;();
 list.add(new Person(&quot;jack&quot;, 20));
 list.add(new Person(&quot;mike&quot;, 25));
 list.add(new Person(&quot;tom&quot;, 30));</code></pre><p>   Person 类包含年龄和姓名两个成员变量</p>
 <pre><code>private String name;
-private int age;</code></pre><p>   3.1.stream() / parallelStream()</p>
-<p>   最常用到的方法，将集合转换为流</p>
+private int age;</code></pre><h3 id="3-1-stream-parallelStream"><a href="#3-1-stream-parallelStream" class="headerlink" title="3.1.stream() / parallelStream()"></a>3.1.stream() / parallelStream()</h3><p>   最常用到的方法，将集合转换为流</p>
 <pre><code>List list = new ArrayList();
 // return Stream&lt;E&gt;
 list.stream();</code></pre><p>   而 parallelStream() 是并行流方法，能够让数据集执行并行操作</p>
-<p>   3.2.filter(T -&gt; boolean)</p>
-<p>   保留 boolean 为 true 的元素</p>
+<h3 id="3-2-filter-T-gt-boolean"><a href="#3-2-filter-T-gt-boolean" class="headerlink" title="3.2.filter(T -&gt; boolean)"></a>3.2.filter(T -&gt; boolean)</h3><p>   保留 boolean 为 true 的元素</p>
 <pre><code>保留年龄为 20 的 person 元素
 list = list.stream()
            .filter(person -&gt; person.getAge() == 20)
            .collect(toList());
 
 打印输出 [Person{name=&apos;jack&apos;, age=20}]</code></pre><p>   collect(toList()) 可以把流转换为 List 类型</p>
-<p>   3.3.distinct()</p>
-<p>   去除重复元素，这个方法是通过类的 equals 方法来判断两个元素是否相等的</p>
-<pre><code>如例子中的 Person 类，需要先定义好 equals 方法，不然类似[Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;jack&apos;, age=20}] 这样的情况是不会处理的</code></pre><p>   3.4.sorted() / sorted((T, T) -&gt; int)</p>
-<p>   如果流中的元素的类实现了 Comparable 接口，即有自己的排序规则，那么可以直接调用 sorted() 方法对元素进行排序，如 Stream<br>   反之, 需要调用 sorted((T, T) -&gt; int) 实现 Comparator 接口</p>
+<h3 id="3-3-distinct"><a href="#3-3-distinct" class="headerlink" title="3.3.distinct()"></a>3.3.distinct()</h3><p>   去除重复元素，这个方法是通过类的 equals 方法来判断两个元素是否相等的</p>
+<pre><code>如例子中的 Person 类，需要先定义好 equals 方法，不然类似[Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;jack&apos;, age=20}] 这样的情况是不会处理的</code></pre><h3 id="3-4-sorted-sorted-T-T-gt-int"><a href="#3-4-sorted-sorted-T-T-gt-int" class="headerlink" title="3.4.sorted() / sorted((T, T) -&gt; int)"></a>3.4.sorted() / sorted((T, T) -&gt; int)</h3><p>   如果流中的元素的类实现了 Comparable 接口，即有自己的排序规则，那么可以直接调用 sorted() 方法对元素进行排序，如 Stream<br>   反之, 需要调用 sorted((T, T) -&gt; int) 实现 Comparator 接口</p>
 <pre><code>根据年龄大小来比较：
 list = list.stream()
           .sorted((p1, p2) -&gt; p1.getAge() - p2.getAge())
@@ -119,14 +112,12 @@ list = list.stream()
 当然这个可以简化为
 list = list.stream()
           .sorted(Comparator.comparingInt(Person::getAge))
-          .collect(toList());</code></pre><p>   3.5.limit(long n)</p>
-<p>   返回前 n 个元素</p>
+          .collect(toList());</code></pre><h3 id="3-5-limit-long-n"><a href="#3-5-limit-long-n" class="headerlink" title="3.5.limit(long n)"></a>3.5.limit(long n)</h3><p>   返回前 n 个元素</p>
 <pre><code>list = list.stream()
            .limit(2)
            .collect(toList());
 
-打印输出 [Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;mike&apos;, age=25}]</code></pre><p>   3.6. skip(long n)</p>
-<p>   去除前 n 个元素</p>
+打印输出 [Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;mike&apos;, age=25}]</code></pre><h3 id="3-6-skip-long-n"><a href="#3-6-skip-long-n" class="headerlink" title="3.6. skip(long n)"></a>3.6. skip(long n)</h3><p>   去除前 n 个元素</p>
 <pre><code>list = list.stream()
            .skip(2)
            .collect(toList());
@@ -138,30 +129,23 @@ list = list.stream()
            .skip(1)
            .collect(toList());
 
-打印输出 [Person{name=&apos;mike&apos;, age=25}]</code></pre><p>   3.7. map(T -&gt; R)</p>
-<p>   将流中的每一个元素 T 映射为 R（类似类型转换）</p>
+打印输出 [Person{name=&apos;mike&apos;, age=25}]</code></pre><h3 id="3-7-map-T-gt-R"><a href="#3-7-map-T-gt-R" class="headerlink" title="3.7. map(T -&gt; R)"></a>3.7. map(T -&gt; R)</h3><p>   将流中的每一个元素 T 映射为 R（类似类型转换）</p>
 <pre><code>List&lt;String&gt; newlist = list.stream().map(Person::getName).collect(toList());
-newlist 里面的元素为 list 中每一个 Person 对象的 name 变量</code></pre><p>   3.8. flatMap(T -&gt; Stream</p>
-<p>   将流中的每一个元素 T 映射为一个流，再把每一个流连接成为一个流</p>
+newlist 里面的元素为 list 中每一个 Person 对象的 name 变量</code></pre><h3 id="3-8-flatMap-T-gt-Stream"><a href="#3-8-flatMap-T-gt-Stream" class="headerlink" title="3.8. flatMap(T -&gt; Stream)"></a>3.8. flatMap(T -&gt; Stream)</h3><p>   将流中的每一个元素 T 映射为一个流，再把每一个流连接成为一个流</p>
 <pre><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();
 list.add(&quot;aaa bbb ccc&quot;);
 list.add(&quot;ddd eee fff&quot;);
 list.add(&quot;ggg hhh iii&quot;);
 
 list = list.stream().map(s -&gt; s.split(&quot; &quot;)).flatMap(Arrays::stream).collect(toList());</code></pre><p>   上面例子中，我们的目的是把 List 中每个字符串元素以” “分割开，变成一个新的 List</p>
-<p>   3.9. anyMatch(T -&gt; boolean)</p>
-<p>   流中是否有一个元素匹配给定的 T -&gt; boolean 条件</p>
+<h3 id="3-9-anyMatch-T-gt-boolean"><a href="#3-9-anyMatch-T-gt-boolean" class="headerlink" title="3.9. anyMatch(T -&gt; boolean)"></a>3.9. anyMatch(T -&gt; boolean)</h3><p>   流中是否有一个元素匹配给定的 T -&gt; boolean 条件</p>
 <pre><code>是否存在一个 person 对象的 age 等于 20：
-boolean b = list.stream().anyMatch(person -&gt; person.getAge() == 20);</code></pre><p>   3.10. allMatch(T -&gt; boolean)</p>
-<p>   流中是否所有元素都匹配给定的 T -&gt; boolean 条件</p>
-<p>   3.11. noneMatch(T -&gt; boolean)</p>
-<p>   流中是否没有元素匹配给定的 T -&gt; boolean 条件</p>
-<p>   3.12. findAny() 和 findFirst()</p>
-<p>   findAny()：找到其中一个元素 （使用 stream() 时找到的是第一个元素；使用 parallelStream() 并行时找到的是其中一个元素）.</p>
+boolean b = list.stream().anyMatch(person -&gt; person.getAge() == 20);</code></pre><h3 id="3-10-allMatch-T-gt-boolean"><a href="#3-10-allMatch-T-gt-boolean" class="headerlink" title="3.10. allMatch(T -&gt; boolean)"></a>3.10. allMatch(T -&gt; boolean)</h3><p>   流中是否所有元素都匹配给定的 T -&gt; boolean 条件</p>
+<h3 id="3-11-noneMatch-T-gt-boolean"><a href="#3-11-noneMatch-T-gt-boolean" class="headerlink" title="3.11. noneMatch(T -&gt; boolean)"></a>3.11. noneMatch(T -&gt; boolean)</h3><p>   流中是否没有元素匹配给定的 T -&gt; boolean 条件</p>
+<h3 id="3-12-findAny-和-findFirst"><a href="#3-12-findAny-和-findFirst" class="headerlink" title="3.12. findAny() 和 findFirst()"></a>3.12. findAny() 和 findFirst()</h3><p>   findAny()：找到其中一个元素 （使用 stream() 时找到的是第一个元素；使用 parallelStream() 并行时找到的是其中一个元素）.</p>
 <p>   findFirst()：找到第一个元素</p>
 <p>   值得注意的是，这两个方法返回的是一个 Optional，它是一个容器类，能代表一个值存在或不存在.</p>
-<p>   3.13. reduce((T, T) -&gt; T) 和 reduce(T, (T, T) -&gt; T)</p>
-<p>   用于组合流中的元素，如求和，求积，求最大值等</p>
+<h3 id="3-13-reduce-T-T-gt-T-和-reduce-T-T-T-gt-T"><a href="#3-13-reduce-T-T-gt-T-和-reduce-T-T-T-gt-T" class="headerlink" title="3.13. reduce((T, T) -&gt; T) 和 reduce(T, (T, T) -&gt; T)"></a>3.13. reduce((T, T) -&gt; T) 和 reduce(T, (T, T) -&gt; T)</h3><p>   用于组合流中的元素，如求和，求积，求最大值等</p>
 <pre><code>计算年龄总和：
 int sum = list.stream().map(Person::getAge).reduce(0, (a, b) -&gt; a + b);
 与之相同:
@@ -175,18 +159,15 @@ int sum = list.stream().map(Person::getAge).reduce(1, (a, b) -&gt; a * b);
 当然也可以
 
 Optional&lt;Integer&gt; sum = list.stream().map(Person::getAge).reduce(Integer::sum);
-即不接受任何起始值，但因为没有初始值，需要考虑结果可能不存在的情况，因此返回的是 Optional 类型</code></pre><p>   3.13. count()</p>
-<p>   返回流中元素个数，结果为 long 类型</p>
-<p>   3.14.collect()</p>
-<p>   收集方法，我们很常用的是 collect(toList())，当然还有 collect(toSet()) 等.</p>
-<p>   3.15. forEach()</p>
-<p>   返回结果为 void，很明显我们可以通过它来干什么了，比方说：</p>
+即不接受任何起始值，但因为没有初始值，需要考虑结果可能不存在的情况，因此返回的是 Optional 类型</code></pre><h3 id="3-13-count"><a href="#3-13-count" class="headerlink" title="3.13. count()"></a>3.13. count()</h3><p>   返回流中元素个数，结果为 long 类型</p>
+<h3 id="3-14-collect"><a href="#3-14-collect" class="headerlink" title="3.14.collect()"></a>3.14.collect()</h3><p>   收集方法，我们很常用的是 collect(toList())，当然还有 collect(toSet()) 等.</p>
+<h3 id="3-15-forEach"><a href="#3-15-forEach" class="headerlink" title="3.15. forEach()"></a>3.15. forEach()</h3><p>   返回结果为 void，很明显我们可以通过它来干什么了，比方说：</p>
 <pre><code>打印各个元素：
 list.stream().forEach(System.out::println);</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjxyc5huj000030w1mfl0xasp" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjxycwiq2000158w1ahfpx39i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -234,7 +215,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjxyc5huq000230w18ydsgtk4" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjxycwiq4000258w1idfqq9av" class="article-share-link">Share</a>
       
       
     </footer>
@@ -271,7 +252,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjxyc5huo000130w1nw2dbl1g" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjxycwiq6000358w1c63n0v1t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -320,7 +301,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjxyc5hur000330w1lu3id15s" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjxycwipx000058w1gfiq5bf5" class="article-share-link">Share</a>
       
       
     </footer>
