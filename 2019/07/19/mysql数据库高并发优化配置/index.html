@@ -5,15 +5,19 @@
   
 
   
-  <title>Hexo</title>
+  <title>mysql数据库高并发优化配置 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://leilei666.github.io/my-blog/index.html">
+  <meta name="description" content="在Apache, PHP, mysql的体系架构中，MySQL对于性能的影响最大，也是关键的核心部分。对于Discuz!论坛程序也是如此，MySQL的设置是否合理优化，直接 影响到论坛的速度和承载量！同时，MySQL也是优化难度最大的一个部分，不但需要理解一些MySQL专业知识，同时还需要长时间的观察统计并且根据经验 进行判断，然后设置合理的参数。  下面我们了解一下MySQL优化的一些基础，My">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql数据库高并发优化配置">
+<meta property="og:url" content="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在Apache, PHP, mysql的体系架构中，MySQL对于性能的影响最大，也是关键的核心部分。对于Discuz!论坛程序也是如此，MySQL的设置是否合理优化，直接 影响到论坛的速度和承载量！同时，MySQL也是优化难度最大的一个部分，不但需要理解一些MySQL专业知识，同时还需要长时间的观察统计并且根据经验 进行判断，然后设置合理的参数。  下面我们了解一下MySQL优化的一些基础，My">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-19T06:35:44.425Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="mysql数据库高并发优化配置">
+<meta name="twitter:description" content="在Apache, PHP, mysql的体系架构中，MySQL对于性能的影响最大，也是关键的核心部分。对于Discuz!论坛程序也是如此，MySQL的设置是否合理优化，直接 影响到论坛的速度和承载量！同时，MySQL也是优化难度最大的一个部分，不但需要理解一些MySQL专业知识，同时还需要长时间的观察统计并且根据经验 进行判断，然后设置合理的参数。  下面我们了解一下MySQL优化的一些基础，My">
   
     <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +64,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-mysql数据库高并发优化配置" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-mysql数据库高并发优化配置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/07/19/mysql数据库高并发优化配置/" class="article-date">
   <time datetime="2019-07-19T06:20:12.000Z" itemprop="datePublished">2019-07-19</time>
@@ -75,8 +77,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/19/mysql数据库高并发优化配置/">mysql数据库高并发优化配置</a>
+    <h1 class="article-title" itemprop="name">
+      mysql数据库高并发优化配置
     </h1>
   
 
@@ -152,260 +154,19 @@ wait_timeout = 10</code></pre><p>指定一个请求的最大连接时间，对�
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="简单又迅速的处理集合-java8-stream" class="article article-type-简单又迅速的处理集合-java8" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/11/stream/" class="article-date">
-  <time datetime="2019-07-11T06:31:31.000Z" itemprop="datePublished">2019-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/11/stream/">stream</a>
-    </h1>
+    <a href="/my-blog/2019/07/11/stream/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stream</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一-什么是Stream"><a href="#一-什么是Stream" class="headerlink" title="一.什么是Stream?"></a>一.什么是Stream?</h2><p>Stream 中文称为 “流”，通过将集合转换为这么一种叫做 “流” 的元素序列，通过声明性方式，能够对集合中的每个元素进行一系列并行或串行的流水线操作。</p>
-<h2 id="二-流操作"><a href="#二-流操作" class="headerlink" title="二.流操作"></a>二.流操作</h2><p>整个流操作就是一条流水线，将元素放在流水线上一个个地进行处理。其中数据源便是原始集合，然后将如 List 的集合转换为 Stream 类型的流，并对流进行一系列的中间操作，比如过滤保留部分元素、对元素进行排序、类型转换等；最后再进行一个终端操作，可以把 Stream 转换回集合类型，也可以直接对其中的各个元素进行处理，比如打印、比如计算总数、计算最大值等等.</p>
-<h2 id="三-一般实现方法"><a href="#三-一般实现方法" class="headerlink" title="三.一般实现方法"></a>三.一般实现方法</h2><p>   首先我们先创建一个 Person 泛型的 List</p>
-<pre><code>List&lt;Person&gt; list = new ArrayList&lt;&gt;();
-list.add(new Person(&quot;jack&quot;, 20));
-list.add(new Person(&quot;mike&quot;, 25));
-list.add(new Person(&quot;tom&quot;, 30));</code></pre><p>   Person 类包含年龄和姓名两个成员变量</p>
-<pre><code>private String name;
-private int age;</code></pre><h3 id="3-1-stream-parallelStream"><a href="#3-1-stream-parallelStream" class="headerlink" title="3.1.stream() / parallelStream()"></a>3.1.stream() / parallelStream()</h3><p>   最常用到的方法，将集合转换为流</p>
-<pre><code>List list = new ArrayList();
-// return Stream&lt;E&gt;
-list.stream();</code></pre><p>   而 parallelStream() 是并行流方法，能够让数据集执行并行操作</p>
-<h3 id="3-2-filter-T-gt-boolean"><a href="#3-2-filter-T-gt-boolean" class="headerlink" title="3.2.filter(T -&gt; boolean)"></a>3.2.filter(T -&gt; boolean)</h3><p>   保留 boolean 为 true 的元素</p>
-<pre><code>保留年龄为 20 的 person 元素
-list = list.stream()
-           .filter(person -&gt; person.getAge() == 20)
-           .collect(toList());
-
-打印输出 [Person{name=&apos;jack&apos;, age=20}]</code></pre><p>   collect(toList()) 可以把流转换为 List 类型</p>
-<h3 id="3-3-distinct"><a href="#3-3-distinct" class="headerlink" title="3.3.distinct()"></a>3.3.distinct()</h3><p>   去除重复元素，这个方法是通过类的 equals 方法来判断两个元素是否相等的</p>
-<pre><code>如例子中的 Person 类，需要先定义好 equals 方法，不然类似[Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;jack&apos;, age=20}] 这样的情况是不会处理的</code></pre><h3 id="3-4-sorted-sorted-T-T-gt-int"><a href="#3-4-sorted-sorted-T-T-gt-int" class="headerlink" title="3.4.sorted() / sorted((T, T) -&gt; int)"></a>3.4.sorted() / sorted((T, T) -&gt; int)</h3><p>   如果流中的元素的类实现了 Comparable 接口，即有自己的排序规则，那么可以直接调用 sorted() 方法对元素进行排序，如 Stream<br>   反之, 需要调用 sorted((T, T) -&gt; int) 实现 Comparator 接口</p>
-<pre><code>根据年龄大小来比较：
-list = list.stream()
-          .sorted((p1, p2) -&gt; p1.getAge() - p2.getAge())
-          .collect(toList());
-当然这个可以简化为
-list = list.stream()
-          .sorted(Comparator.comparingInt(Person::getAge))
-          .collect(toList());</code></pre><h3 id="3-5-limit-long-n"><a href="#3-5-limit-long-n" class="headerlink" title="3.5.limit(long n)"></a>3.5.limit(long n)</h3><p>   返回前 n 个元素</p>
-<pre><code>list = list.stream()
-           .limit(2)
-           .collect(toList());
-
-打印输出 [Person{name=&apos;jack&apos;, age=20}, Person{name=&apos;mike&apos;, age=25}]</code></pre><h3 id="3-6-skip-long-n"><a href="#3-6-skip-long-n" class="headerlink" title="3.6. skip(long n)"></a>3.6. skip(long n)</h3><p>   去除前 n 个元素</p>
-<pre><code>list = list.stream()
-           .skip(2)
-           .collect(toList());
-
-打印输出 [Person{name=&apos;tom&apos;, age=30}]</code></pre><p>   tips:</p>
-<p>   用在 limit(n) 前面时，先去除前 m 个元素再返回剩余元素的前 n 个元素<br>   limit(n) 用在 skip(m) 前面时，先返回前 n 个元素再在剩余的 n 个元素中去除 m 个元素.</p>
-<pre><code> list = list.stream()
-           .limit(2)
-           .skip(1)
-           .collect(toList());
-
-打印输出 [Person{name=&apos;mike&apos;, age=25}]</code></pre><h3 id="3-7-map-T-gt-R"><a href="#3-7-map-T-gt-R" class="headerlink" title="3.7. map(T -&gt; R)"></a>3.7. map(T -&gt; R)</h3><p>   将流中的每一个元素 T 映射为 R（类似类型转换）</p>
-<pre><code>List&lt;String&gt; newlist = list.stream().map(Person::getName).collect(toList());
-newlist 里面的元素为 list 中每一个 Person 对象的 name 变量</code></pre><h3 id="3-8-flatMap-T-gt-Stream"><a href="#3-8-flatMap-T-gt-Stream" class="headerlink" title="3.8. flatMap(T -&gt; Stream)"></a>3.8. flatMap(T -&gt; Stream)</h3><p>   将流中的每一个元素 T 映射为一个流，再把每一个流连接成为一个流</p>
-<pre><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();
-list.add(&quot;aaa bbb ccc&quot;);
-list.add(&quot;ddd eee fff&quot;);
-list.add(&quot;ggg hhh iii&quot;);
-
-list = list.stream().map(s -&gt; s.split(&quot; &quot;)).flatMap(Arrays::stream).collect(toList());</code></pre><p>   上面例子中，我们的目的是把 List 中每个字符串元素以” “分割开，变成一个新的 List</p>
-<h3 id="3-9-anyMatch-T-gt-boolean"><a href="#3-9-anyMatch-T-gt-boolean" class="headerlink" title="3.9. anyMatch(T -&gt; boolean)"></a>3.9. anyMatch(T -&gt; boolean)</h3><p>   流中是否有一个元素匹配给定的 T -&gt; boolean 条件</p>
-<pre><code>是否存在一个 person 对象的 age 等于 20：
-boolean b = list.stream().anyMatch(person -&gt; person.getAge() == 20);</code></pre><h3 id="3-10-allMatch-T-gt-boolean"><a href="#3-10-allMatch-T-gt-boolean" class="headerlink" title="3.10. allMatch(T -&gt; boolean)"></a>3.10. allMatch(T -&gt; boolean)</h3><p>   流中是否所有元素都匹配给定的 T -&gt; boolean 条件</p>
-<h3 id="3-11-noneMatch-T-gt-boolean"><a href="#3-11-noneMatch-T-gt-boolean" class="headerlink" title="3.11. noneMatch(T -&gt; boolean)"></a>3.11. noneMatch(T -&gt; boolean)</h3><p>   流中是否没有元素匹配给定的 T -&gt; boolean 条件</p>
-<h3 id="3-12-findAny-和-findFirst"><a href="#3-12-findAny-和-findFirst" class="headerlink" title="3.12. findAny() 和 findFirst()"></a>3.12. findAny() 和 findFirst()</h3><p>   findAny()：找到其中一个元素 （使用 stream() 时找到的是第一个元素；使用 parallelStream() 并行时找到的是其中一个元素）.</p>
-<p>   findFirst()：找到第一个元素</p>
-<p>   值得注意的是，这两个方法返回的是一个 Optional，它是一个容器类，能代表一个值存在或不存在.</p>
-<h3 id="3-13-reduce-T-T-gt-T-和-reduce-T-T-T-gt-T"><a href="#3-13-reduce-T-T-gt-T-和-reduce-T-T-T-gt-T" class="headerlink" title="3.13. reduce((T, T) -&gt; T) 和 reduce(T, (T, T) -&gt; T)"></a>3.13. reduce((T, T) -&gt; T) 和 reduce(T, (T, T) -&gt; T)</h3><p>   用于组合流中的元素，如求和，求积，求最大值等</p>
-<pre><code>计算年龄总和：
-int sum = list.stream().map(Person::getAge).reduce(0, (a, b) -&gt; a + b);
-与之相同:
-int sum = list.stream().map(Person::getAge).reduce(0, Integer::sum);
-其中，reduce 第一个参数 0 代表起始值为 0，lambda (a, b) -&gt; a + b 即将两值相加产生一个新值
-
-同样地：
-
-计算年龄总乘积：
-int sum = list.stream().map(Person::getAge).reduce(1, (a, b) -&gt; a * b);
-当然也可以
-
-Optional&lt;Integer&gt; sum = list.stream().map(Person::getAge).reduce(Integer::sum);
-即不接受任何起始值，但因为没有初始值，需要考虑结果可能不存在的情况，因此返回的是 Optional 类型</code></pre><h3 id="3-13-count"><a href="#3-13-count" class="headerlink" title="3.13. count()"></a>3.13. count()</h3><p>   返回流中元素个数，结果为 long 类型</p>
-<h3 id="3-14-collect"><a href="#3-14-collect" class="headerlink" title="3.14.collect()"></a>3.14.collect()</h3><p>   收集方法，我们很常用的是 collect(toList())，当然还有 collect(toSet()) 等.</p>
-<h3 id="3-15-forEach"><a href="#3-15-forEach" class="headerlink" title="3.15. forEach()"></a>3.15. forEach()</h3><p>   返回结果为 void，很明显我们可以通过它来干什么了，比方说：</p>
-<pre><code>打印各个元素：
-list.stream().forEach(System.out::println);</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjy9qdpc6000054w101utf1hn" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-博客网" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/10/博客网/" class="article-date">
-  <time datetime="2019-07-10T10:45:47.000Z" itemprop="datePublished">2019-07-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/10/博客网/">博客网</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>大家好啊！</p>
-<pre><code>public static String getNowLocalDate(String formatter){
-    LocalDate localDate = LocalDate.now();
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);
-    return localDate.format(dateTimeFormatter);
-}
-
-public static String getNowLocalTime(String formatter){
-    LocalTime localTime = LocalTime.now();
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(formatter);
-    return localTime.format(timeFormatter);
-}</code></pre><p>这是我第一篇博客！zhuleilei</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjy9qdpcf000354w1dei6owwu" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-测试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/09/测试/" class="article-date">
-  <time datetime="2019-07-09T08:38:26.000Z" itemprop="datePublished">2019-07-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/09/测试/">测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>大家好，这是我第一篇博客！</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjy9qdpce000254w1fj67dyux" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/09/hello-world/" class="article-date">
-  <time datetime="2019-07-09T08:31:04.132Z" itemprop="datePublished">2019-07-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/09/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjy9qdpcb000154w1m7jbdtku" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
