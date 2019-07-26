@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>java常用工具类 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一. org.apache.commons.io.IOUtilscloseQuietly：关闭一个IO流、socket、或者selector且不抛出异常，通常放在finally块 toString：转换IO流、 Uri、 byte[]为String copy：IO流数据复制，从输入流写到输出流中，最大支持2GB toByteArray：从输入流、URI获取byte[] write：把字节. 字符等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java常用工具类">
+<meta property="og:url" content="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. org.apache.commons.io.IOUtilscloseQuietly：关闭一个IO流、socket、或者selector且不抛出异常，通常放在finally块 toString：转换IO流、 Uri、 byte[]为String copy：IO流数据复制，从输入流写到输出流中，最大支持2GB toByteArray：从输入流、URI获取byte[] write：把字节. 字符等">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-26T06:56:24.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java常用工具类">
+<meta name="twitter:description" content="一. org.apache.commons.io.IOUtilscloseQuietly：关闭一个IO流、socket、或者selector且不抛出异常，通常放在finally块 toString：转换IO流、 Uri、 byte[]为String copy：IO流数据复制，从输入流写到输出流中，最大支持2GB toByteArray：从输入流、URI获取byte[] write：把字节. 字符等">
+  
+    <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/my-blog/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/my-blog/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/my-blog/">Home</a>
+        
+          <a class="main-nav-link" href="/my-blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/my-blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://leilei666.github.io/my-blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-java常用工具类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/07/26/java常用工具类/" class="article-date">
+  <time datetime="2019-07-26T06:51:38.000Z" itemprop="datePublished">2019-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java常用工具类
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一-org-apache-commons-io-IOUtils"><a href="#一-org-apache-commons-io-IOUtils" class="headerlink" title="一. org.apache.commons.io.IOUtils"></a>一. org.apache.commons.io.IOUtils</h3><pre><code>closeQuietly：关闭一个IO流、socket、或者selector且不抛出异常，通常放在finally块
+toString：转换IO流、 Uri、 byte[]为String
+copy：IO流数据复制，从输入流写到输出流中，最大支持2GB
+toByteArray：从输入流、URI获取byte[]
+write：把字节. 字符等写入输出流
+toInputStream：把字符转换为输入流
+readLines：从输入流中读取多行数据，返回List&lt;String&gt;
+copyLarge：同copy，支持2GB以上数据的复制
+lineIterator：从输入流返回一个迭代器，根据参数要求读取的数据量，全部读取，如果数据不够，则失败</code></pre><h3 id="二-org-apache-commons-io-FileUtils"><a href="#二-org-apache-commons-io-FileUtils" class="headerlink" title="二. org.apache.commons.io.FileUtils"></a>二. org.apache.commons.io.FileUtils</h3><pre><code>deleteDirectory：删除文件夹
+readFileToString：以字符形式读取文件内容
+deleteQueitly：删除文件或文件夹且不会抛出异常
+copyFile：复制文件
+writeStringToFile：把字符写到目标文件，如果文件不存在，则创建
+forceMkdir：强制创建文件夹，如果该文件夹父级目录不存在，则创建父级
+write：把字符写到指定文件中
+listFiles：列举某个目录下的文件(根据过滤器)
+copyDirectory：复制文件夹
+forceDelete：强制删除文件</code></pre><h3 id="三-org-apache-commons-lang-StringUtils"><a href="#三-org-apache-commons-lang-StringUtils" class="headerlink" title="三. org.apache.commons.lang.StringUtils"></a>三. org.apache.commons.lang.StringUtils</h3><pre><code>isBlank：字符串是否为空 (trim后判断)
+isEmpty：字符串是否为空 (不trim并判断)
+equals：字符串是否相等
+join：合并数组为单一字符串，可传分隔符
+split：分割字符串
+EMPTY：返回空字符串
+trimToNull：trim后为空字符串则转换为null
+replace：替换字符串</code></pre><h3 id="四-org-apache-http-util-EntityUtils"><a href="#四-org-apache-http-util-EntityUtils" class="headerlink" title="四. org.apache.http.util.EntityUtils"></a>四. org.apache.http.util.EntityUtils</h3><pre><code>toString：把Entity转换为字符串
+consume：确保Entity中的内容全部被消费。可以看到源码里又一次消费了Entity的内容，假如用户没有消费，那调用Entity时候将会把它消费掉
+toByteArray：把Entity转换为字节流
+consumeQuietly：和consume一样，但不抛异常
+getContentCharset：获取内容的编码</code></pre><h3 id="五-org-apache-commons-lang3-StringUtils"><a href="#五-org-apache-commons-lang3-StringUtils" class="headerlink" title="五. org.apache.commons.lang3.StringUtils"></a>五. org.apache.commons.lang3.StringUtils</h3><pre><code>isBlank：字符串是否为空 (trim后判断)
+isEmpty：字符串是否为空 (不trim并判断)
+equals：字符串是否相等
+join：合并数组为单一字符串，可传分隔符
+split：分割字符串
+EMPTY：返回空字符串
+replace：替换字符串
+capitalize：首字符大写</code></pre><h3 id="六-org-apache-commons-io-FilenameUtils"><a href="#六-org-apache-commons-io-FilenameUtils" class="headerlink" title="六. org.apache.commons.io.FilenameUtils"></a>六. org.apache.commons.io.FilenameUtils</h3><pre><code>getExtension：返回文件后缀名
+getBaseName：返回文件名，不包含后缀名
+getName：返回文件全名
+concat：按命令行风格组合文件路径(详见方法注释)
+removeExtension：删除后缀名
+normalize：使路径正常化
+wildcardMatch：匹配通配符
+seperatorToUnix：路径分隔符改成unix系统格式的，即/
+getFullPath：获取文件路径，不包括文件名
+isExtension：检查文件后缀名是不是传入参数(List&lt;String&gt;)中的一个</code></pre><h3 id="七-org-springframework-util-StringUtils"><a href="#七-org-springframework-util-StringUtils" class="headerlink" title="七. org.springframework.util.StringUtils"></a>七. org.springframework.util.StringUtils</h3><pre><code>hasText：检查字符串中是否包含文本
+hasLength：检测字符串是否长度大于0
+isEmpty：检测字符串是否为空（若传入为对象，则判断对象是否为null）
+commaDelimitedStringToArray：逗号分隔的String转换为数组
+collectionToDelimitedString：把集合转为CSV格式字符串
+replace 替换字符串
+7. delimitedListToStringArray：相当于split
+uncapitalize：首字母小写
+collectionToDelimitedCommaString：把集合转为CSV格式字符串
+tokenizeToStringArray：和split基本一样，但能自动去掉空白的单词</code></pre><h3 id="八-org-apache-commons-lang-ArrayUtils"><a href="#八-org-apache-commons-lang-ArrayUtils" class="headerlink" title="八. org.apache.commons.lang.ArrayUtils"></a>八. org.apache.commons.lang.ArrayUtils</h3><pre><code>contains：是否包含某字符串
+addAll：添加整个数组
+clone：克隆一个数组
+isEmpty：是否空数组
+add：向数组添加元素
+subarray：截取数组
+indexOf：查找某个元素的下标
+isEquals：比较数组是否相等
+toObject：基础类型数据数组转换为对应的Object数组</code></pre><h3 id="九-org-apache-commons-lang-StringEscapeUtils"><a href="#九-org-apache-commons-lang-StringEscapeUtils" class="headerlink" title="九. org.apache.commons.lang.StringEscapeUtils"></a>九. org.apache.commons.lang.StringEscapeUtils</h3><pre><code>参考十五：org.apache.commons.lang3.StringEscapeUtils</code></pre><h3 id="十-org-apache-http-client-utils-URLEncodedUtils"><a href="#十-org-apache-http-client-utils-URLEncodedUtils" class="headerlink" title="十. org.apache.http.client.utils.URLEncodedUtils"></a>十. org.apache.http.client.utils.URLEncodedUtils</h3><pre><code>format：格式化参数，返回一个HTTP POST或者HTTP PUT可用application/x-www-form-urlencoded字符串
+parse：把String或者URI等转换为List&lt;NameValuePair&gt;</code></pre><h3 id="十一-org-apache-commons-codec-digest-DigestUtils"><a href="#十一-org-apache-commons-codec-digest-DigestUtils" class="headerlink" title="十一. org.apache.commons.codec.digest.DigestUtils"></a>十一. org.apache.commons.codec.digest.DigestUtils</h3><pre><code>md5Hex：MD5加密，返回32位字符串
+sha1Hex：SHA-1加密
+sha256Hex：SHA-256加密
+sha512Hex：SHA-512加密
+md5：MD5加密，返回16位字符串</code></pre><h3 id="十二-org-apache-commons-collections-CollectionUtils"><a href="#十二-org-apache-commons-collections-CollectionUtils" class="headerlink" title="十二. org.apache.commons.collections.CollectionUtils"></a>十二. org.apache.commons.collections.CollectionUtils</h3><pre><code>isEmpty：是否为空
+select：根据条件筛选集合元素
+transform：根据指定方法处理集合元素，类似List的map()
+filter：过滤元素，雷瑟List的filter()
+find：基本和select一样
+collect：和transform 差不多一样，但是返回新数组
+forAllDo：调用每个元素的指定方法
+isEqualCollection：判断两个集合是否一致</code></pre><h3 id="十三-org-apache-commons-lang3-ArrayUtils"><a href="#十三-org-apache-commons-lang3-ArrayUtils" class="headerlink" title="十三. org.apache.commons.lang3.ArrayUtils"></a>十三. org.apache.commons.lang3.ArrayUtils</h3><pre><code>contains：是否包含某个字符串
+addAll：添加整个数组
+clone：克隆一个数组
+isEmpty：是否空数组
+add：向数组添加元素
+subarray：截取数组
+indexOf：查找某个元素的下标
+isEquals：比较数组是否相等
+toObject：基础类型数据数组转换为对应的Object数组</code></pre><h3 id="十四-org-apache-commons-beanutils-PropertyUtils"><a href="#十四-org-apache-commons-beanutils-PropertyUtils" class="headerlink" title="十四. org.apache.commons.beanutils.PropertyUtils"></a>十四. org.apache.commons.beanutils.PropertyUtils</h3><pre><code>getProperty：获取对象属性值
+setProperty：设置对象属性值
+getPropertyDiscriptor：获取属性描述器
+isReadable：检查属性是否可访问
+copyProperties：复制属性值，从一个对象到另一个对象
+getPropertyDiscriptors：获取所有属性描述器
+isWriteable：检查属性是否可写
+getPropertyType：获取对象属性类型</code></pre><h3 id="十五-org-apache-commons-lang3-StringEscapeUtils"><a href="#十五-org-apache-commons-lang3-StringEscapeUtils" class="headerlink" title="十五. org.apache.commons.lang3.StringEscapeUtils"></a>十五. org.apache.commons.lang3.StringEscapeUtils</h3><pre><code>unescapeHtml4：转义html
+escapeHtml4：反转义html
+escapeXml：转义xml
+unescapeXml：反转义xml
+escapeJava：转义unicode编码
+escapeEcmaScript：转义EcmaScript字符
+unescapeJava：反转义unicode编码
+escapeJson：转义json字符
+escapeXml10：转义Xml10
+
+这个现在已经废弃了，建议使用commons-text包里面的方法。</code></pre><h3 id="十六-org-apache-commons-beanutils-BeanUtils"><a href="#十六-org-apache-commons-beanutils-BeanUtils" class="headerlink" title="十六. org.apache.commons.beanutils.BeanUtils"></a>十六. org.apache.commons.beanutils.BeanUtils</h3><pre><code>copyPeoperties：复制属性值，从一个对象到另一个对象
+getProperty：获取对象属性值
+setProperty：设置对象属性值
+populate：根据Map给属性复制
+copyPeoperty：复制单个值，从一个对象到另一个对象
+cloneBean：克隆bean实例</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="cjyjr97040000q0w1w4nvy0pl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/my-blog/2019/07/19/mysql数据库高并发优化配置/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mysql数据库高并发优化配置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/my-blog/2019/07/26/java常用工具类/">java常用工具类</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/07/19/mysql数据库高并发优化配置/">mysql数据库高并发优化配置</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/07/11/stream/">stream</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/07/10/博客网/">博客网</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/07/09/测试/">测试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/my-blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/my-blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/my-blog/fancybox/jquery.fancybox.css">
+  <script src="/my-blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/my-blog/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
