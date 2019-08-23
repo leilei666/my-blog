@@ -62,6 +62,90 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-sql技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/08/23/sql技巧/" class="article-date">
+  <time datetime="2019-08-23T10:24:38.000Z" itemprop="datePublished">2019-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/my-blog/2019/08/23/sql技巧/">sql技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对于数据过滤而言CHECK约束已经算是相当不错了。然而它仍存在一些缺陷，比如说它们是应用到表上面的，但有的时候你可能希望指定一条约束，而它只在特定条件下才生效。</p>
+<p>使用SQL标准的WITH CHECK OPTION子句就能完成这点，至少Oracle和SQL Server都实现了这个功能。下面是实现方式：</p>
+<pre><code>CREATE TABLE books (
+  id    NUMBER(10)         NOT NULL,
+  title VARCHAR2(100 CHAR) NOT NULL,
+  price NUMBER(10, 2)      NOT NULL,
+
+  CONSTRAINT pk_book PRIMARY KEY (id)
+);
+/
+
+CREATE VIEW expensive_books
+AS
+SELECT id, title, price
+FROM books
+WHERE price &gt; 100
+WITH CHECK OPTION;
+/
+
+INSERT INTO books 
+VALUES (1, &apos;1984&apos;, 35.90);
+
+INSERT INTO books 
+VALUES (
+, 
+  &apos;The Answer to Life, the Universe, and Everything&apos;,
+.90
+);</code></pre><p>正如你看到的那样，expensive_books 是那些价格大于100块的书。这个视图只会返回第二本书：</p>
+<p>SELECT * FROM expensive_books;</p>
+<p>上述查询的输出是：</p>
+<pre><code>ID TITLE                                       PRICE
+-- ----------------------------------------- -------
+ The Answer to Life, the Universe, and ...   999.9 </code></pre><p>不过由于我们使用了CHECK OPTION，我们还能防止用户往”昂贵的书籍”中插入那些廉价的。比如说，我们运行下这个查询：</p>
+<pre><code>INSERT INTO expensive_books 
+VALUES (3, &apos;10 Reasons why jOOQ is Awesome&apos;, 9.99);</code></pre><p>它是无法生效的。你会看到：</p>
+<pre><code>ORA-01402: view WITH CHECK OPTION where-clause violation</code></pre><p>我们也无法将贵的书更新成便宜的：</p>
+<pre><code>UPDATE expensive_books
+SET price = 9.99;</code></pre><p>这个查询也会报出同样的ORA-01402错误。</p>
+<pre><code>WITH CHECK OPTION内联</code></pre><p>如果你需要局部防止脏数据被插入到表中，你可以使用WITH CHECK OPTION的内联子句：</p>
+<pre><code>INSERT INTO (
+  SELECT *
+  FROM expensive_books
+  WHERE price &gt; 1000
+  WITH CHECK OPTION
+) really_expensive_books
+VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上述查询同样也会导到ORA-01402错误。</p>
+<p>使用SQL转换来生成特殊约束<br>CHECK OPTION对于已存储的视图非常有用，它使得那些无权直接访问底层表的用户能够获得正确的授权，而内联的CHECK OPTION主要是在应用的SQL中间转换层来进行动态SQL的转换。</p>
+<p>这个可以通过[jOOQ的SQL转换功能]<a href="http://www.jooq.org/doc/latest/manual/sql-building/queryparts/custom-sql-transformation/url)来完成，比如说，你可以在SQL语句中对某个表进行约束，从根本上阻止了非法DML的执行。如果你的数据库没有本地提供行级别的安全性的话，这也是一个实现多租户的不错的方式" target="_blank" rel="noopener">http://www.jooq.org/doc/latest/manual/sql-building/queryparts/custom-sql-transformation/url)来完成，比如说，你可以在SQL语句中对某个表进行约束，从根本上阻止了非法DML的执行。如果你的数据库没有本地提供行级别的安全性的话，这也是一个实现多租户的不错的方式</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="cjznz2hfx00008sw1ti0nntmq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java-8新的时间日期库的20个使用实例" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" class="article-date">
@@ -280,7 +364,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="cjzdrwntx0007rww15uu0103k" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="cjznz2hgs00088sw1stpykapv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -520,7 +604,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="cjzdrwnte0005rww1vt3slr7a" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="cjznz2hgh00078sw1z655fsje" class="article-share-link">Share</a>
       
       
     </footer>
@@ -659,7 +743,7 @@ cloneBean：克隆bean实例</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="cjzdrwnsj0001rww1pim5pik8" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="cjznz2hgb00058sw1yg1n742f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -750,7 +834,7 @@ wait_timeout = 10</code></pre><p>指定一个请求的最大连接时间，对�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="cjzdrwnth0006rww1phoyptep" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="cjznz2hgg00068sw1em0qcsks" class="article-share-link">Share</a>
       
       
     </footer>
@@ -865,7 +949,7 @@ list.stream().forEach(System.out::println);</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjzdrwnsu0004rww1suj7tay0" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjznz2hg500028sw1t39tunce" class="article-share-link">Share</a>
       
       
     </footer>
@@ -913,7 +997,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjzdrwnss0003rww1p4s0gh5a" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjznz2hg800038sw1gaiawugi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -950,7 +1034,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjzdrwnso0002rww10tzj0089" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjznz2hg900048sw1qnbyk0h9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -999,7 +1083,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjzdrwns80000rww1152tl03c" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjznz2hg200018sw15qxqns4l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1040,6 +1124,10 @@ public static String getNowLocalTime(String formatter){
       <ul>
         
           <li>
+            <a href="/my-blog/2019/08/23/sql技巧/">sql技巧</a>
+          </li>
+        
+          <li>
             <a href="/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/">Java 8新的时间日期库的20个使用实例</a>
           </li>
         
@@ -1053,10 +1141,6 @@ public static String getNowLocalTime(String formatter){
         
           <li>
             <a href="/my-blog/2019/07/19/mysql数据库高并发优化配置/">mysql数据库高并发优化配置</a>
-          </li>
-        
-          <li>
-            <a href="/my-blog/2019/07/11/stream/">stream</a>
           </li>
         
       </ul>
