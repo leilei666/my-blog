@@ -4,15 +4,15 @@ date: 2019-08-30 13:55:56
 tags:
 ---
 
-##一、RabbitMQ起步
+## 一、RabbitMQ起步
 
-###1、RabbitMQ简介
+### 1、RabbitMQ简介
 
-####1.1、什么是RabbitMQ？
+#### 1.1、什么是RabbitMQ？
 
 RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。
 
-####1.2、RabbitMQ有哪些特点？
+#### 1.2、RabbitMQ有哪些特点？
 
 目前大多数互联网都在使用RabbitMQ
 
@@ -26,11 +26,11 @@ RabbitMQ底层采用Erlang语言进行编写
 
 保证数据不丢失的前提做到高可靠、可用性
 
-###2、RabbitMQ安装和使用
+### 2、RabbitMQ安装和使用
 
 官方下载地址：http://www.rabbitmq.com/
 
-###3、RabbitMQ核心概念
+### 3、RabbitMQ核心概念
 Server：又称Broker（实体服务） 接收客户端的连接。实现AMQP实体服务
 
 Connection：连接，应用程序与Broker的网络连接
@@ -53,7 +53,7 @@ Routing key：一个路由规则，虚拟机可用它来确定如何路由一个
 
 Queue：也称为Message Queue,消息队列，保存消息并将它们转发给消费者，消费者直接监听队列就能收到消息了
 
-##二、RabbitMQ整合Spring Boot2.x
+## 二、RabbitMQ整合Spring Boot2.x
 
 1、生产端基本配置application.properties
 
@@ -88,7 +88,7 @@ springboot整合rabbitmq消费端配置
     spring.rabbitmq.listener.simple.prefetch=1server.servlet.context-path=/server.port=8002
     spring.http.encoding.charset=UTF-8spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
     spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
-##三、消息100%可靠性投递的解决方案实现
+## 三、消息100%可靠性投递的解决方案实现
 
 Step 1： 首先把消息信息(业务数据）存储到数据库中，紧接着，我们再把这个消息记录也存储到一张消息记录表里（或者另外一个同源数据库的消息记录表）
 
