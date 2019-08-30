@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>RabbitMQ消息中间件 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="##一、RabbitMQ起步 ###1、RabbitMQ简介 ####1.1、什么是RabbitMQ？ RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。 ####1.2、RabbitMQ有哪些特点？ 目前大多数互联网都在使用RabbitMQ RabbitMQ底">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ消息中间件">
+<meta property="og:url" content="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##一、RabbitMQ起步 ###1、RabbitMQ简介 ####1.1、什么是RabbitMQ？ RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。 ####1.2、RabbitMQ有哪些特点？ 目前大多数互联网都在使用RabbitMQ RabbitMQ底">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-30T07:05:09.608Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ消息中间件">
+<meta name="twitter:description" content="##一、RabbitMQ起步 ###1、RabbitMQ简介 ####1.1、什么是RabbitMQ？ RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。 ####1.2、RabbitMQ有哪些特点？ 目前大多数互联网都在使用RabbitMQ RabbitMQ底">
+  
+    <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/my-blog/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/my-blog/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/my-blog/">Home</a>
+        
+          <a class="main-nav-link" href="/my-blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/my-blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://leilei666.github.io/my-blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-RabbitMQ消息中间件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/08/30/RabbitMQ消息中间件/" class="article-date">
+  <time datetime="2019-08-30T05:55:56.000Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RabbitMQ消息中间件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##一、RabbitMQ起步</p>
+<p>###1、RabbitMQ简介</p>
+<p>####1.1、什么是RabbitMQ？</p>
+<p>RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。</p>
+<p>####1.2、RabbitMQ有哪些特点？</p>
+<p>目前大多数互联网都在使用RabbitMQ</p>
+<p>RabbitMQ底层采用Erlang语言进行编写</p>
+<p>开源、性能优秀，稳定</p>
+<p>与SpringAMQP完美的整合、API丰富</p>
+<p>集群模式丰富，表达式配置，HA模式，镜像队列模型</p>
+<p>保证数据不丢失的前提做到高可靠、可用性</p>
+<p>###2、RabbitMQ安装和使用</p>
+<p>官方下载地址：<a href="http://www.rabbitmq.com/" target="_blank" rel="noopener">http://www.rabbitmq.com/</a></p>
+<p>###3、RabbitMQ核心概念<br>Server：又称Broker（实体服务） 接收客户端的连接。实现AMQP实体服务</p>
+<p>Connection：连接，应用程序与Broker的网络连接</p>
+<p>Channel ：网络信道，几乎所有的操作都在Chanel中进行，Channel是进行消息读写的通道。客户端可建立多个Channel，每个Channel代表一个</p>
+<p>会话任务</p>
+<p>Message：消息，服务器和应用程序之间传送的数据，由Properties和Body组成。Properties可以对消息进行修饰，比如消息的优先级，延迟等高级特性；Body则就是消息体内容。</p>
+<p>Virtual host：虚拟地址，用于进行逻辑隔离，最上层的消息路由。一个</p>
+<p>Virtual host里面可以有若干个Exchange和Queue，同一个Virtual host里面不能有相同名称的Exchange或Queue（用于隔离不同的项目和应用的）</p>
+<p>Exchange：交换机，接收消息，根据路由键转发消息到绑定的队列</p>
+<p>Binding：Exchange和Queue之间的虚拟连接，binding中可以包含routing key</p>
+<p>Routing key：一个路由规则，虚拟机可用它来确定如何路由一个特定消息</p>
+<p>Queue：也称为Message Queue,消息队列，保存消息并将它们转发给消费者，消费者直接监听队列就能收到消息了</p>
+<p>##二、RabbitMQ整合Spring Boot2.x</p>
+<p>1、生产端基本配置application.properties</p>
+<pre><code>spring.rabbitmq.addresses=localhost:5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guestspring.rabbitmq.virtual-host=/
+spring.rabbitmq.connection-timeout=15000server.servlet.context-path=/server.port=8001
+spring.http.encoding.charset=UTF-8spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL</code></pre><p>2、生产端发送消息</p>
+<p>3、配置rabbitmq的exchange和queue，并让二者建立关联关系</p>
+<p>4、消息发送成功</p>
+<p>5、消费端配置application.properties</p>
+<p>springboot整合rabbitmq基本配置</p>
+<pre><code>spring.rabbitmq.addresses=localhost:5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+spring.rabbitmq.virtual-host=/spring.rabbitmq.connection-timeout=15000</code></pre><p>springboot整合rabbitmq消费端配置</p>
+<pre><code>spring.rabbitmq.listener.simple.concurrency=5
+spring.rabbitmq.listener.simple.acknowledge-mode=manual
+spring.rabbitmq.listener.simple.max-concurrency=10</code></pre><p>限流</p>
+<pre><code>spring.rabbitmq.listener.simple.prefetch=1server.servlet.context-path=/server.port=8002
+spring.http.encoding.charset=UTF-8spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL</code></pre><p>##三、消息100%可靠性投递的解决方案实现</p>
+<p>Step 1： 首先把消息信息(业务数据）存储到数据库中，紧接着，我们再把这个消息记录也存储到一张消息记录表里（或者另外一个同源数据库的消息记录表）</p>
+<p>Step 2：发送消息到MQ Broker节点（采用confirm方式发送，会有异步的返回结果）</p>
+<p>Step 3、4：生产者端接受MQ Broker节点返回的Confirm确认消息结果，然后进行更新消息记录表里的消息状态。比如默认Status = 0 当收到消息确认成功后，更新为1即可！</p>
+<p>Step 5：但是在消息确认这个过程中可能由于网络闪断、MQ Broker端异常等原因导致 回送消息失败或者异常。这个时候就需要发送方（生产者）对消息进行可靠性投递了，保障消息不丢失，100%的投递成功！（有一种极限情况是闪断，Broker返回的成功确认消息，但是生产端由于网络闪断没收到，这个时候重新投递可能会造成消息重复，需要消费端去做幂等处理）所以我们需要有一个定时任务，（比如每5分钟拉取一下处于中间状态的消息，当然这个消息可以设置一个超时时间，比如超过1分钟 Status = 0 ，也就说明了1分钟这个时间窗口内，我们的消息没有被确认，那么会被定时任务拉取出来）</p>
+<p>Step 6：接下来我们把中间状态的消息进行重新投递 retry send，继续发送消息到MQ ，当然也可能有多种原因导致发送失败</p>
+<p>Step 7：我们可以采用设置最大努力尝试次数，比如投递了3次，还是失败，那么我们可以将最终状态设置为Status = 2 ，最后 交由人工解决处理此类问题（或者把消息转储到失败表中）。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="cjzxszdc10000ykw13h3c0wkn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/my-blog/2019/08/23/sql技巧/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">sql技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/my-blog/2019/08/30/RabbitMQ消息中间件/">RabbitMQ消息中间件</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/08/23/sql技巧/">sql技巧</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/">Java 8新的时间日期库的20个使用实例</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/08/09/ThreadLocal原理分析/">ThreadLocal原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/07/26/java常用工具类/">java常用工具类</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/my-blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/my-blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/my-blog/fancybox/jquery.fancybox.css">
+  <script src="/my-blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/my-blog/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
