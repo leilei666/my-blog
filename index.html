@@ -84,20 +84,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、RabbitMQ起步</p>
-<p>###1、RabbitMQ简介</p>
-<p>####1.1、什么是RabbitMQ？</p>
-<p>RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。</p>
-<p>####1.2、RabbitMQ有哪些特点？</p>
-<p>目前大多数互联网都在使用RabbitMQ</p>
+        <h2 id="一、RabbitMQ起步"><a href="#一、RabbitMQ起步" class="headerlink" title="一、RabbitMQ起步"></a>一、RabbitMQ起步</h2><h3 id="1、RabbitMQ简介"><a href="#1、RabbitMQ简介" class="headerlink" title="1、RabbitMQ简介"></a>1、RabbitMQ简介</h3><h4 id="1-1、什么是RabbitMQ？"><a href="#1-1、什么是RabbitMQ？" class="headerlink" title="1.1、什么是RabbitMQ？"></a>1.1、什么是RabbitMQ？</h4><p>RabbitMQ是一个开元的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于 AMQP协议的。</p>
+<h4 id="1-2、RabbitMQ有哪些特点？"><a href="#1-2、RabbitMQ有哪些特点？" class="headerlink" title="1.2、RabbitMQ有哪些特点？"></a>1.2、RabbitMQ有哪些特点？</h4><p>目前大多数互联网都在使用RabbitMQ</p>
 <p>RabbitMQ底层采用Erlang语言进行编写</p>
 <p>开源、性能优秀，稳定</p>
 <p>与SpringAMQP完美的整合、API丰富</p>
 <p>集群模式丰富，表达式配置，HA模式，镜像队列模型</p>
 <p>保证数据不丢失的前提做到高可靠、可用性</p>
-<p>###2、RabbitMQ安装和使用</p>
-<p>官方下载地址：<a href="http://www.rabbitmq.com/" target="_blank" rel="noopener">http://www.rabbitmq.com/</a></p>
-<p>###3、RabbitMQ核心概念<br>Server：又称Broker（实体服务） 接收客户端的连接。实现AMQP实体服务</p>
+<h3 id="2、RabbitMQ安装和使用"><a href="#2、RabbitMQ安装和使用" class="headerlink" title="2、RabbitMQ安装和使用"></a>2、RabbitMQ安装和使用</h3><p>官方下载地址：<a href="http://www.rabbitmq.com/" target="_blank" rel="noopener">http://www.rabbitmq.com/</a></p>
+<h3 id="3、RabbitMQ核心概念"><a href="#3、RabbitMQ核心概念" class="headerlink" title="3、RabbitMQ核心概念"></a>3、RabbitMQ核心概念</h3><p>Server：又称Broker（实体服务） 接收客户端的连接。实现AMQP实体服务</p>
 <p>Connection：连接，应用程序与Broker的网络连接</p>
 <p>Channel ：网络信道，几乎所有的操作都在Chanel中进行，Channel是进行消息读写的通道。客户端可建立多个Channel，每个Channel代表一个</p>
 <p>会话任务</p>
@@ -108,8 +103,7 @@
 <p>Binding：Exchange和Queue之间的虚拟连接，binding中可以包含routing key</p>
 <p>Routing key：一个路由规则，虚拟机可用它来确定如何路由一个特定消息</p>
 <p>Queue：也称为Message Queue,消息队列，保存消息并将它们转发给消费者，消费者直接监听队列就能收到消息了</p>
-<p>##二、RabbitMQ整合Spring Boot2.x</p>
-<p>1、生产端基本配置application.properties</p>
+<h2 id="二、RabbitMQ整合Spring-Boot2-x"><a href="#二、RabbitMQ整合Spring-Boot2-x" class="headerlink" title="二、RabbitMQ整合Spring Boot2.x"></a>二、RabbitMQ整合Spring Boot2.x</h2><p>1、生产端基本配置application.properties</p>
 <pre><code>spring.rabbitmq.addresses=localhost:5672
 spring.rabbitmq.username=guest
 spring.rabbitmq.password=guestspring.rabbitmq.virtual-host=/
@@ -129,8 +123,7 @@ spring.rabbitmq.listener.simple.acknowledge-mode=manual
 spring.rabbitmq.listener.simple.max-concurrency=10</code></pre><p>限流</p>
 <pre><code>spring.rabbitmq.listener.simple.prefetch=1server.servlet.context-path=/server.port=8002
 spring.http.encoding.charset=UTF-8spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
-spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL</code></pre><p>##三、消息100%可靠性投递的解决方案实现</p>
-<p>Step 1： 首先把消息信息(业务数据）存储到数据库中，紧接着，我们再把这个消息记录也存储到一张消息记录表里（或者另外一个同源数据库的消息记录表）</p>
+spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL</code></pre><h2 id="三、消息100-可靠性投递的解决方案实现"><a href="#三、消息100-可靠性投递的解决方案实现" class="headerlink" title="三、消息100%可靠性投递的解决方案实现"></a>三、消息100%可靠性投递的解决方案实现</h2><p>Step 1： 首先把消息信息(业务数据）存储到数据库中，紧接着，我们再把这个消息记录也存储到一张消息记录表里（或者另外一个同源数据库的消息记录表）</p>
 <p>Step 2：发送消息到MQ Broker节点（采用confirm方式发送，会有异步的返回结果）</p>
 <p>Step 3、4：生产者端接受MQ Broker节点返回的Confirm确认消息结果，然后进行更新消息记录表里的消息状态。比如默认Status = 0 当收到消息确认成功后，更新为1即可！</p>
 <p>Step 5：但是在消息确认这个过程中可能由于网络闪断、MQ Broker端异常等原因导致 回送消息失败或者异常。这个时候就需要发送方（生产者）对消息进行可靠性投递了，保障消息不丢失，100%的投递成功！（有一种极限情况是闪断，Broker返回的成功确认消息，但是生产端由于网络闪断没收到，这个时候重新投递可能会造成消息重复，需要消费端去做幂等处理）所以我们需要有一个定时任务，（比如每5分钟拉取一下处于中间状态的消息，当然这个消息可以设置一个超时时间，比如超过1分钟 Status = 0 ，也就说明了1分钟这个时间窗口内，我们的消息没有被确认，那么会被定时任务拉取出来）</p>
@@ -140,7 +133,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="cjzxszdc10000ykw13h3c0wkn" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="cjzxt6tcx00003kw1wl8vy2x0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -224,7 +217,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="cjzxszdc90002ykw1pynqphky" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="cjzxt6td400023kw1w94gwx52" class="article-share-link">Share</a>
       
       
     </footer>
@@ -452,7 +445,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="cjzxszdcw0009ykw1w0tsto3p" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="cjzxt6tdq00093kw1ad5ilxr8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -692,7 +685,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="cjzxszdco0007ykw1tufzo7yy" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="cjzxt6tdo00083kw154i7qlx3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -831,7 +824,7 @@ cloneBean：克隆bean实例</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="cjzxszdcd0005ykw1p9b9tjk6" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="cjzxt6td100013kw16b5u8uq9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -922,7 +915,7 @@ wait_timeout = 10</code></pre><p>指定一个请求的最大连接时间，对�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="cjzxszdcp0008ykw1ls6altys" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="cjzxt6tdm00073kw1h2av0wjy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1037,7 +1030,7 @@ list.stream().forEach(System.out::println);</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjzxszdcf0006ykw18s4ejio9" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="cjzxt6tda00063kw1rt0r5au3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1085,7 +1078,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjzxszdcc0004ykw1mmwv8lds" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="cjzxt6td500033kw1vs2ia05j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1122,7 +1115,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjzxszdca0003ykw1ypypcefu" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="cjzxt6td800053kw1mcq2uhq4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1171,7 +1164,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjzxszdc60001ykw10lqo6pei" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/hello-world/" data-id="cjzxt6td700043kw1wv6dedwz" class="article-share-link">Share</a>
       
       
     </footer>
