@@ -1,0 +1,204 @@
+---
+layout: java
+title: java 10的类型推导
+date: 2019-09-14 22:45:53
+tags:
+---
+Java 10带来了全新的语言特性：局部变量类型推导（local variable type inference）。它的主要目标就是减少样板代码（boilerplate），增强代码可读性。可以使用关键词var来替代局部变量的类型声明——编译器会根据变量初始化语句来自己填充正确的类型的。比如说：
+
+    Map<User, List<String>> userChannels = new HashMap<>();
+
+在Java 10中可以这么写：
+
+    var userChannels = new HashMap<User, List<String>>();
+
+除了代码的简洁性，类型推导还有不少优点，本文我们将会一一看下。先来看一个稍微复杂点的例子：
+
+    Path path = Paths.get("src/web.log");
+    try (Stream<String&gt; lines = Files.lines(path)){
+        long warningCount =
+            lines.filter(line -&gt; line.contains("WARNING"))
+                 .count();
+        System.out.println(
+            "Found " + warningCount + " warnings in the log file");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+在Java 10中可以重构为：
+
+    var path = Paths.get("src/web.log");
+    try (var lines = Files.lines(path)){
+        var warningCount =
+            lines.filter(line -&gt; line.contains("WARNING"))
+                 .count();
+        System.out.println(
+            "Found " + warningCount + " warnings in the log file");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+代码中的表达式都仍是静态类型的（也就是值所声明的类型），对应如下：
+
+局部变量path类型为Path。
+变量lines的类型是Stream。
+warningCount类型是long
+也就说其它类型的值赋值过去是会报错的。比方说下面重新赋值的代码在编译时就会报错：
+
+    var warningCount = 5;
+    warningCount = "6";
+    |  Error:
+    |  incompatible types: java.lang.String cannot be converted to int
+    |  warningCount = "6"
+关于类型推导还有一些地方是要注意的。比如说，如果Car和Bike是Vehicle的子类，那么var v = new Car();声明的类型是Car还是Vehicle？
+
+简单来说，省略的类型和初始化的类型是一致的（在这里是Car类型），这点很清楚了，换句话说如果没有初始化语句是不能使用var的。
+
+如果后面再进行v = new Bike();赋值是不行的。换句话说，var是不支持多态的。
+
+什么情况用不了类型推导
+哪些情况用不了类型推导？首先，只有局部变量可以使用。字段或者方法签名都不支持的。比如说下面这个就是错误的：
+
+public long process(var list) { } 如果没有显式的初始化语句的局部变量声明也是不行的。也就是说不能只用var声明变量却没有赋值。
+
+下面的：
+
+var x; 会返回编译报错：
+
+    |  Error:
+    |  cannot infer type for local variable x
+    |    (cannot use 'var' on variable without initializer)
+    |  var x;
+    |  ^----^
+也不能将var变量初始化为null。因为它可能要在后边才进行初始化，这样就无法确定具体类型。
+
+    |  Error:
+    |  cannot infer type for local variable x
+    |    (variable initializer is 'null')
+    |  var x = null;
+    |  ^-----------^
+var也不能用于lambda表达式，因为它需要显式的目标类型。下面的赋值语句会报错：
+
+var x = () -> {} 报这个错误：
+
+    |  Error:
+    |  cannot infer type for local variable x
+    |    (lambda expression needs an explicit target-type)
+    |  var x = () -&gt; {};
+    |  ^---------------^
+不过不一样的是下面的赋值是能通过的，因为右边有显式的初始化语句：
+
+var list = new ArrayList<>(); 但list的静态类型是什么？推导出来的变量类型是ArrayList< Object >，这可能并不是太有意义，因为泛型信息丢失了。所以你可能并不希望这样来赋值。
+
+匿名类型（Nondenotable Types）的推导
+Java中存在几种匿名类型——这个类型确实存在于程序中，但无法写出它的类型名。匿名类就是一个很好的例子——你可以往它里面添加字段和方法，但无法在代码中引用这个类的名字。<>操作符也无法用于匿名类。var的限制相对少一点，可以支持部分匿名类型——具体来说就是匿名类和交集类型（intersection type）。
+
+var关键词可以更高效地使用匿名类，或用来引用“无法描述清楚”的类型。正常来说，如果你创建了一个匿名类，可以往里面添加新的字段，但却没办法引用这些字段，因为这个对象总会要赋值给一个已知的类型的。
+
+
+ 
+比如说，下面这段代码就没法通过编译，因为productInfo的类型是Object，不可能去访问一个Object对象的name和total字段：
+
+    Object productInfo = new Object() {
+        String name = "Apple";
+        int total = 30;
+    };
+    System.out.println(
+        "name = " + productInfo.name + ", total = " + productInfo.total);
+而var能解决这一问题。当你把一个匿名对象赋值给var类型的局部变量时，编译器能推导出匿名类的真正类型，而不只是父类类型。这样你就可以引用匿名类内部所声明的字段了，如下所示：
+
+    var productInfo = new Object() {
+        String name = "Apple";
+        int total = 30;
+     
+    };
+    System.out.println(
+        "name = " + productInfo.name + ", total = " + productInfo.total);
+
+这一功能看起来貌似只是一个很有意思的小的语言特性而已，没什么大用，但在某些场景下还是很有帮助的。比方说，在某个方法里你希望返回几个值作为中间变量。正常来说，只为了在这一个方法里面使用，你就得创建和维护一个新的类型。比如在Collectors.averagingDouble()的实现中，一个小的double数组就是用作这个目的的。
+
+var有一个更好的解决方案：使用匿名类来存储中间值。
+
+再来看一个例子，你有一些产品，产品会有自己的名字，数量，单价。你需要计算每个物品的总价值——也就是数量乘以单价。如果只需要这个信息的话将产品map到它的价值就可以了，但结果信息中可能还需要加上产品名才更有意义。
+
+我们来看下Java 10中通过var可以怎么做：
+
+    var products = List.of(
+        new Product(10, 3, "Apple"),
+        new Product( 5, 2, "Banana"),
+        new Product(17, 5, "Pear"));
+    var productInfos = products
+        .stream()
+        .map(product -&gt; new Object() {
+            String name = product.getName();
+            int total = product.getStock() * product.getValue();
+    }).collect(toList());
+     
+    productInfos.forEach(prod -&gt; System.out.println(
+        "name = " + prod.name + ", total = " + prod.total));
+会输出如下信息：
+
+    name = Apple, total = 30
+    name = Banana, total = 10
+    name = Pear, total = 85
+并不是所有的匿名类型都能使用var。它只支持匿名类和交集类型。而通配符类型则不支持推导，这是为了避免给Java开发人员展示太多与通配符相关的复杂报错信息。支持匿名类型是为了能尽可能多地保留推导类型的信息，以便能用局部变量来重构更多代码。这项特性最初的设计目标并不是为了编写类似上面这样的代码的，而是希望解决var在处理匿名类型时会碰到的问题。var在匿名类型上的使用是否会流行起来还不好说。
+
+推荐用法
+类型推导当然可以减少Java代码的编写时间，不过它对可读性有没有提升？开发人员通常花在读代码上的时间比写代码要多得多，因此肯定希望阅读代码时能更轻松一点。而var对可读性的提升是因人而异的：有人喜欢它，有人讨厌它。你应该时刻关注如何能让团队成员能更好地阅读你的代码。如果大家都喜欢var，就用它；否则就不要使用。
+
+有的时候显式类型声明会妨碍可读性。比如说，当遍历Map的entrySet时，需要在Map.Entry中再重复参数类型。下面这段代码会遍历国家下面的各个城市：
+
+    Map<String, List<String&gt;&gt; countryToCity = new HashMap<&gt;();
+    // ...
+    for (Map.Entry<String, List<String&gt;&gt; citiesInCountry :
+        countryToCity.entrySet()) {
+            List<String&gt; cities = citiesInCountry.getValue();
+    // ...
+    }
+可以用var来重写这段代码，减少重复和样板代码，如下：
+
+    var countryToCity = new HashMap<String, List<String&gt;&gt;();
+    // ...
+    for (var citiesInCountry : countryToCity.entrySet()) {
+        var cities = citiesInCountry.getValue();
+    // ...
+    }
+这不光提升了可读性，对代码的可维护性也有提高。
+
+比如说，如果还是同样的代码，如果要将城市从String类型替换为City，增加些额外的城市信息，正常你需要重写代码，因为它依赖了特定的类型。
+
+    Map<String, List<City&gt;&gt; countryToCity = new HashMap<&gt;();
+    // ...
+    for (Map.Entry<String, List<City&gt;&gt; citiesInCountry :
+        countryToCity.entrySet()) {
+                List<City&gt; cities = citiesInCountry.getValue();
+    // ...
+    }
+而如果使用了var及类型推导，只需要改下首行代码便可以了，其它代码无需改动：
+
+    var countryToCity = new HashMap<String, List<City&gt;&gt;();
+    // ...
+    for (var citiesInCountry : countryToCity.entrySet()) {
+        var cities = citiesInCountry.getValue();
+    // ...
+    }
+这个例子说明了var使用的一个关键原则：不要为了读写代码方便而进行优化，而应该优化可维护性。如果奔着可维护性去优化代码，随着程序的不断迭代，自然会在可读性和代码量上能找到平衡点。
+
+很难说使用了类型推导就一定能够对代码有所提升——有的时候显式类型会让代码的可读性更强一些。尤其是当表达式中不容易看出具体类型时。下面的代码最好还是使用显式类型，因为光看getCities()你是不知道它返回了什么的：
+
+    Map<String, List<City&gt;&gt; countryToCity = getCities();
+    var countryToCity = getCities();
+关于var和可读性间的权衡，终极建议是：使用好变量名！由于var省略了变量的类型，读代码的人只能去猜测代码的真实意图，因此作为开发人员更有义务要为局部变量取一个好的名字。理论上来说这也是Java开发人员应该做的。不过在实践中，其实Java代码的很多可读性问题并不是语言特性引起的，更多还是目前大家的做法导致的，比如说变量命名。
+
+类型推导及IDE
+许多IDE都提供了局部变量提取（extract local variable）的功能，它们能推导出正确的类型并且生成代码。这个特性和Java 10中的var关键字的功能有些重叠。IDE和var都能节省手动输入类型的工作量，不过它们有着不同的取舍。
+
+提取功能会在代码中生成一个拥有完整类型信息的局部变量，而var则彻底消除了在代码中声明类型的必要。尽管它们在简少代码编写上的作用是相似的，但var或多或少改变了可读性而提取功能则没有。正如前面所说的，大多数情况下var还是能提升可读性的，不过有的时候又变成了阻碍。
+
+和其它语言相比
+Java不是首个也不是唯一一个进行类型推导的语言。事实上Java 10所引入的类弄推导功能仍非常有限。目前var的推导算法只检查了变量的赋值表达式，保证了实现的简单以及编译器报错能直接到关联到具体的var语句上。
+
+结论
+从提高生产效率和可读性方面来看，var的类型推导是Java语言的一个有效的补充，不过这只是一个开始。未来的Java版本仍会继续稳步推进语言的革新及现代化。比如在Java 10发布后仅过了6个月便发布的长期支持版的Java 11中，var关键字便可用于lambda表达式的参数中。这样便可以推导出参数的类型，并且仍然可以使用注解，比如这样：
+
+    (@Nonnull var x, var y) -> x.process(y)
+
+而函数式编程语言中已经成为主流的一些做法也会陆续加入到未来的Java版本中来——比如说模式匹配和值类型。加入这些优化并非意味着Java不再是那个开发人员所熟知和喜爱的语言了。相反，Java会变为一门更灵活，可读性更强，更简洁的语言。
