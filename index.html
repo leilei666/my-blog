@@ -62,6 +62,166 @@
       <div class="outer">
         <section id="main">
   
+    <article id="java-java 10的类型推导" class="article article-type-java" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/09/14/java 10的类型推导/" class="article-date">
+  <time datetime="2019-09-14T14:45:53.000Z" itemprop="datePublished">2019-09-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java 10带来了全新的语言特性：局部变量类型推导（local variable type inference）。它的主要目标就是减少样板代码（boilerplate），增强代码可读性。可以使用关键词var来替代局部变量的类型声明——编译器会根据变量初始化语句来自己填充正确的类型的。比如说：</p>
+<pre><code>Map&lt;User, List&lt;String&gt;&gt; userChannels = new HashMap&lt;&gt;();</code></pre><p>在Java 10中可以这么写：</p>
+<pre><code>var userChannels = new HashMap&lt;User, List&lt;String&gt;&gt;();</code></pre><p>除了代码的简洁性，类型推导还有不少优点，本文我们将会一一看下。先来看一个稍微复杂点的例子：</p>
+<pre><code>Path path = Paths.get(&quot;src/web.log&quot;);
+try (Stream&lt;String&amp;gt; lines = Files.lines(path)){
+    long warningCount =
+        lines.filter(line -&amp;gt; line.contains(&quot;WARNING&quot;))
+             .count();
+    System.out.println(
+        &quot;Found &quot; + warningCount + &quot; warnings in the log file&quot;);
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre><p>在Java 10中可以重构为：</p>
+<pre><code>var path = Paths.get(&quot;src/web.log&quot;);
+try (var lines = Files.lines(path)){
+    var warningCount =
+        lines.filter(line -&amp;gt; line.contains(&quot;WARNING&quot;))
+             .count();
+    System.out.println(
+        &quot;Found &quot; + warningCount + &quot; warnings in the log file&quot;);
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre><p>代码中的表达式都仍是静态类型的（也就是值所声明的类型），对应如下：</p>
+<p>局部变量path类型为Path。<br>变量lines的类型是Stream。<br>warningCount类型是long<br>也就说其它类型的值赋值过去是会报错的。比方说下面重新赋值的代码在编译时就会报错：</p>
+<pre><code>var warningCount = 5;
+warningCount = &quot;6&quot;;
+|  Error:
+|  incompatible types: java.lang.String cannot be converted to int
+|  warningCount = &quot;6&quot;</code></pre><p>关于类型推导还有一些地方是要注意的。比如说，如果Car和Bike是Vehicle的子类，那么var v = new Car();声明的类型是Car还是Vehicle？</p>
+<p>简单来说，省略的类型和初始化的类型是一致的（在这里是Car类型），这点很清楚了，换句话说如果没有初始化语句是不能使用var的。</p>
+<p>如果后面再进行v = new Bike();赋值是不行的。换句话说，var是不支持多态的。</p>
+<p>什么情况用不了类型推导<br>哪些情况用不了类型推导？首先，只有局部变量可以使用。字段或者方法签名都不支持的。比如说下面这个就是错误的：</p>
+<p>public long process(var list) { } 如果没有显式的初始化语句的局部变量声明也是不行的。也就是说不能只用var声明变量却没有赋值。</p>
+<p>下面的：</p>
+<p>var x; 会返回编译报错：</p>
+<pre><code>|  Error:
+|  cannot infer type for local variable x
+|    (cannot use &apos;var&apos; on variable without initializer)
+|  var x;
+|  ^----^</code></pre><p>也不能将var变量初始化为null。因为它可能要在后边才进行初始化，这样就无法确定具体类型。</p>
+<pre><code>|  Error:
+|  cannot infer type for local variable x
+|    (variable initializer is &apos;null&apos;)
+|  var x = null;
+|  ^-----------^</code></pre><p>var也不能用于lambda表达式，因为它需要显式的目标类型。下面的赋值语句会报错：</p>
+<p>var x = () -&gt; {} 报这个错误：</p>
+<pre><code>|  Error:
+|  cannot infer type for local variable x
+|    (lambda expression needs an explicit target-type)
+|  var x = () -&amp;gt; {};
+|  ^---------------^</code></pre><p>不过不一样的是下面的赋值是能通过的，因为右边有显式的初始化语句：</p>
+<p>var list = new ArrayList&lt;&gt;(); 但list的静态类型是什么？推导出来的变量类型是ArrayList&lt; Object &gt;，这可能并不是太有意义，因为泛型信息丢失了。所以你可能并不希望这样来赋值。</p>
+<p>匿名类型（Nondenotable Types）的推导<br>Java中存在几种匿名类型——这个类型确实存在于程序中，但无法写出它的类型名。匿名类就是一个很好的例子——你可以往它里面添加字段和方法，但无法在代码中引用这个类的名字。&lt;&gt;操作符也无法用于匿名类。var的限制相对少一点，可以支持部分匿名类型——具体来说就是匿名类和交集类型（intersection type）。</p>
+<p>var关键词可以更高效地使用匿名类，或用来引用“无法描述清楚”的类型。正常来说，如果你创建了一个匿名类，可以往里面添加新的字段，但却没办法引用这些字段，因为这个对象总会要赋值给一个已知的类型的。</p>
+<p>比如说，下面这段代码就没法通过编译，因为productInfo的类型是Object，不可能去访问一个Object对象的name和total字段：</p>
+<pre><code>Object productInfo = new Object() {
+    String name = &quot;Apple&quot;;
+    int total = 30;
+};
+System.out.println(
+    &quot;name = &quot; + productInfo.name + &quot;, total = &quot; + productInfo.total);</code></pre><p>而var能解决这一问题。当你把一个匿名对象赋值给var类型的局部变量时，编译器能推导出匿名类的真正类型，而不只是父类类型。这样你就可以引用匿名类内部所声明的字段了，如下所示：</p>
+<pre><code>var productInfo = new Object() {
+    String name = &quot;Apple&quot;;
+    int total = 30;
+
+};
+System.out.println(
+    &quot;name = &quot; + productInfo.name + &quot;, total = &quot; + productInfo.total);</code></pre><p>这一功能看起来貌似只是一个很有意思的小的语言特性而已，没什么大用，但在某些场景下还是很有帮助的。比方说，在某个方法里你希望返回几个值作为中间变量。正常来说，只为了在这一个方法里面使用，你就得创建和维护一个新的类型。比如在Collectors.averagingDouble()的实现中，一个小的double数组就是用作这个目的的。</p>
+<p>var有一个更好的解决方案：使用匿名类来存储中间值。</p>
+<p>再来看一个例子，你有一些产品，产品会有自己的名字，数量，单价。你需要计算每个物品的总价值——也就是数量乘以单价。如果只需要这个信息的话将产品map到它的价值就可以了，但结果信息中可能还需要加上产品名才更有意义。</p>
+<p>我们来看下Java 10中通过var可以怎么做：</p>
+<pre><code>var products = List.of(
+    new Product(10, 3, &quot;Apple&quot;),
+    new Product( 5, 2, &quot;Banana&quot;),
+    new Product(17, 5, &quot;Pear&quot;));
+var productInfos = products
+    .stream()
+    .map(product -&amp;gt; new Object() {
+        String name = product.getName();
+        int total = product.getStock() * product.getValue();
+}).collect(toList());
+
+productInfos.forEach(prod -&amp;gt; System.out.println(
+    &quot;name = &quot; + prod.name + &quot;, total = &quot; + prod.total));</code></pre><p>会输出如下信息：</p>
+<pre><code>name = Apple, total = 30
+name = Banana, total = 10
+name = Pear, total = 85</code></pre><p>并不是所有的匿名类型都能使用var。它只支持匿名类和交集类型。而通配符类型则不支持推导，这是为了避免给Java开发人员展示太多与通配符相关的复杂报错信息。支持匿名类型是为了能尽可能多地保留推导类型的信息，以便能用局部变量来重构更多代码。这项特性最初的设计目标并不是为了编写类似上面这样的代码的，而是希望解决var在处理匿名类型时会碰到的问题。var在匿名类型上的使用是否会流行起来还不好说。</p>
+<p>推荐用法<br>类型推导当然可以减少Java代码的编写时间，不过它对可读性有没有提升？开发人员通常花在读代码上的时间比写代码要多得多，因此肯定希望阅读代码时能更轻松一点。而var对可读性的提升是因人而异的：有人喜欢它，有人讨厌它。你应该时刻关注如何能让团队成员能更好地阅读你的代码。如果大家都喜欢var，就用它；否则就不要使用。</p>
+<p>有的时候显式类型声明会妨碍可读性。比如说，当遍历Map的entrySet时，需要在Map.Entry中再重复参数类型。下面这段代码会遍历国家下面的各个城市：</p>
+<pre><code>Map&lt;String, List&lt;String&amp;gt;&amp;gt; countryToCity = new HashMap&lt;&amp;gt;();
+// ...
+for (Map.Entry&lt;String, List&lt;String&amp;gt;&amp;gt; citiesInCountry :
+    countryToCity.entrySet()) {
+        List&lt;String&amp;gt; cities = citiesInCountry.getValue();
+// ...
+}</code></pre><p>可以用var来重写这段代码，减少重复和样板代码，如下：</p>
+<pre><code>var countryToCity = new HashMap&lt;String, List&lt;String&amp;gt;&amp;gt;();
+// ...
+for (var citiesInCountry : countryToCity.entrySet()) {
+    var cities = citiesInCountry.getValue();
+// ...
+}</code></pre><p>这不光提升了可读性，对代码的可维护性也有提高。</p>
+<p>比如说，如果还是同样的代码，如果要将城市从String类型替换为City，增加些额外的城市信息，正常你需要重写代码，因为它依赖了特定的类型。</p>
+<pre><code>Map&lt;String, List&lt;City&amp;gt;&amp;gt; countryToCity = new HashMap&lt;&amp;gt;();
+// ...
+for (Map.Entry&lt;String, List&lt;City&amp;gt;&amp;gt; citiesInCountry :
+    countryToCity.entrySet()) {
+            List&lt;City&amp;gt; cities = citiesInCountry.getValue();
+// ...
+}</code></pre><p>而如果使用了var及类型推导，只需要改下首行代码便可以了，其它代码无需改动：</p>
+<pre><code>var countryToCity = new HashMap&lt;String, List&lt;City&amp;gt;&amp;gt;();
+// ...
+for (var citiesInCountry : countryToCity.entrySet()) {
+    var cities = citiesInCountry.getValue();
+// ...
+}</code></pre><p>这个例子说明了var使用的一个关键原则：不要为了读写代码方便而进行优化，而应该优化可维护性。如果奔着可维护性去优化代码，随着程序的不断迭代，自然会在可读性和代码量上能找到平衡点。</p>
+<p>很难说使用了类型推导就一定能够对代码有所提升——有的时候显式类型会让代码的可读性更强一些。尤其是当表达式中不容易看出具体类型时。下面的代码最好还是使用显式类型，因为光看getCities()你是不知道它返回了什么的：</p>
+<pre><code>Map&lt;String, List&lt;City&amp;gt;&amp;gt; countryToCity = getCities();
+var countryToCity = getCities();</code></pre><p>关于var和可读性间的权衡，终极建议是：使用好变量名！由于var省略了变量的类型，读代码的人只能去猜测代码的真实意图，因此作为开发人员更有义务要为局部变量取一个好的名字。理论上来说这也是Java开发人员应该做的。不过在实践中，其实Java代码的很多可读性问题并不是语言特性引起的，更多还是目前大家的做法导致的，比如说变量命名。</p>
+<p>类型推导及IDE<br>许多IDE都提供了局部变量提取（extract local variable）的功能，它们能推导出正确的类型并且生成代码。这个特性和Java 10中的var关键字的功能有些重叠。IDE和var都能节省手动输入类型的工作量，不过它们有着不同的取舍。</p>
+<p>提取功能会在代码中生成一个拥有完整类型信息的局部变量，而var则彻底消除了在代码中声明类型的必要。尽管它们在简少代码编写上的作用是相似的，但var或多或少改变了可读性而提取功能则没有。正如前面所说的，大多数情况下var还是能提升可读性的，不过有的时候又变成了阻碍。</p>
+<p>和其它语言相比<br>Java不是首个也不是唯一一个进行类型推导的语言。事实上Java 10所引入的类弄推导功能仍非常有限。目前var的推导算法只检查了变量的赋值表达式，保证了实现的简单以及编译器报错能直接到关联到具体的var语句上。</p>
+<p>结论<br>从提高生产效率和可读性方面来看，var的类型推导是Java语言的一个有效的补充，不过这只是一个开始。未来的Java版本仍会继续稳步推进语言的革新及现代化。比如在Java 10发布后仅过了6个月便发布的长期支持版的Java 11中，var关键字便可用于lambda表达式的参数中。这样便可以推导出参数的类型，并且仍然可以使用注解，比如这样：</p>
+<pre><code>(@Nonnull var x, var y) -&gt; x.process(y)</code></pre><p>而函数式编程语言中已经成为主流的一些做法也会陆续加入到未来的Java版本中来——比如说模式匹配和值类型。加入这些优化并非意味着Java不再是那个开发人员所熟知和喜爱的语言了。相反，Java会变为一门更灵活，可读性更强，更简洁的语言。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck0jo9x8m00084kw1jhzp62ab" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-profile介绍" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/09/07/profile介绍/" class="article-date">
@@ -121,7 +281,7 @@ server:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck097n80t0002gkw14m7d5d3x" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck0jo9x8300034kw1qe3px8kt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -202,7 +362,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck097n80k0000gkw16qvjm18e" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck0jo9x7s00004kw1agk74xgn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -286,7 +446,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck097n8100006gkw1npdocz7o" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck0jo9x8400044kw1gsxrke41" class="article-share-link">Share</a>
       
       
     </footer>
@@ -514,7 +674,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck097n81o000agkw1tvmom9xw" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck0jo9x8z000b4kw1mrrj0rmg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -754,7 +914,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck097n81e0008gkw15dc7edwk" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck0jo9x8p00094kw1jn2ari2w" class="article-share-link">Share</a>
       
       
     </footer>
@@ -893,7 +1053,7 @@ cloneBean：克隆bean实例</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck097n80r0001gkw10yl2z9ef" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck0jo9x7y00014kw1ns0w8m0x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -984,7 +1144,7 @@ wait_timeout = 10</code></pre><p>指定一个请求的最大连接时间，对�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="ck097n81g0009gkw1cnsidnwp" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="ck0jo9x8q000a4kw1v4adgmbb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1099,7 +1259,7 @@ list.stream().forEach(System.out::println);</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="ck097n80y0005gkw1xsu2oasg" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="ck0jo9x8700064kw1zg7c2ut0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1147,44 +1307,7 @@ public static String getNowLocalTime(String formatter){
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="ck097n80v0003gkw12sceg7s6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-测试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/09/测试/" class="article-date">
-  <time datetime="2019-07-09T08:38:26.000Z" itemprop="datePublished">2019-07-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/09/测试/">测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>大家好，这是我第一篇博客！</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/09/测试/" data-id="ck097n80w0004gkw1bs2484ac" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="ck0jo9x8600054kw1ipwvsj0h" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1230,6 +1353,10 @@ public static String getNowLocalTime(String formatter){
       <ul>
         
           <li>
+            <a href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
+          </li>
+        
+          <li>
             <a href="/my-blog/2019/09/07/profile介绍/">profile介绍</a>
           </li>
         
@@ -1243,10 +1370,6 @@ public static String getNowLocalTime(String formatter){
         
           <li>
             <a href="/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/">Java 8新的时间日期库的20个使用实例</a>
-          </li>
-        
-          <li>
-            <a href="/my-blog/2019/08/09/ThreadLocal原理分析/">ThreadLocal原理分析</a>
           </li>
         
       </ul>
