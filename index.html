@@ -62,6 +62,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java开发必会的linux命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/09/20/java开发必会的linux命令/" class="article-date">
+  <time datetime="2019-09-20T07:27:46.000Z" itemprop="datePublished">2019-09-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/my-blog/2019/09/20/java开发必会的linux命令/">java开发必会的linux命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-查找文件"><a href="#1-查找文件" class="headerlink" title="1.查找文件"></a>1.查找文件</h3><pre><code>find / -name filename.txt 根据名称查找/目录下的filename.txt文件。
+
+find . -name &quot;*.xml&quot; 递归查找所有的xml文件
+
+find . -name &quot;*.xml&quot; |xargs grep &quot;hello world&quot; 递归查找所有文件内容中包含hello world的xml文件
+
+grep -H &apos;spring&apos; *.xml 查找所以有的包含spring的xml文件
+
+find ./ -size 0 | xargs rm -f &amp; 删除文件大小为零的文件
+
+ls -l | grep &apos;.jar&apos; 查找当前目录中的所有jar文件
+
+grep &apos;test&apos; d* 显示所有以d开头的文件中包含test的行。
+
+grep &apos;test&apos; aa bb cc 显示在aa，bb，cc文件中匹配test的行。
+
+grep &apos;[a-z]\{5\}&apos; aa 显示所有包含每个字符串至少有5个连续小写字符的字符串的行。</code></pre><h3 id="2-查看一个程序是否运行"><a href="#2-查看一个程序是否运行" class="headerlink" title="2.查看一个程序是否运行"></a>2.查看一个程序是否运行</h3><pre><code>ps –ef|grep tomcat 查看所有有关tomcat的进程
+
+ps -ef|grep --color java 高亮要查询的关键字</code></pre><h3 id="3-终止线程"><a href="#3-终止线程" class="headerlink" title="3.终止线程"></a>3.终止线程</h3><pre><code>kill -9 19979 终止线程号位19979的进程</code></pre><h3 id="4-查看文件，包含隐藏文件"><a href="#4-查看文件，包含隐藏文件" class="headerlink" title="4.查看文件，包含隐藏文件"></a>4.查看文件，包含隐藏文件</h3><pre><code>ls -al</code></pre><h3 id="5-当前工作目录"><a href="#5-当前工作目录" class="headerlink" title="5.当前工作目录"></a>5.当前工作目录</h3><pre><code>pwd</code></pre><h3 id="6-复制文件"><a href="#6-复制文件" class="headerlink" title="6.复制文件"></a>6.复制文件</h3><pre><code>cp source dest 复制文件
+
+cp -r sourceFolder targetFolder 递归复制整个文件夹
+
+scp sourecFile romoteUserName@remoteIp:remoteAddr 远程拷贝</code></pre><h3 id="7-创建目录"><a href="#7-创建目录" class="headerlink" title="7.创建目录"></a>7.创建目录</h3><pre><code>mkdir newfolder</code></pre><h3 id="8-删除目录"><a href="#8-删除目录" class="headerlink" title="8.删除目录"></a>8.删除目录</h3><pre><code>rmdir deleteEmptyFolder 删除空目录 rm -rf deleteFile 递归删除目录中所有内容</code></pre><h3 id="9-移动文件"><a href="#9-移动文件" class="headerlink" title="9.移动文件"></a>9.移动文件</h3><pre><code>mv /temp/movefile /targetFolder</code></pre><h3 id="10-重命令"><a href="#10-重命令" class="headerlink" title="10.重命令"></a>10.重命令</h3><pre><code>mv oldNameFile newNameFile</code></pre><h3 id="11-切换用户"><a href="#11-切换用户" class="headerlink" title="11.切换用户"></a>11.切换用户</h3><pre><code>su -username</code></pre><h3 id="12-修改文件权限"><a href="#12-修改文件权限" class="headerlink" title="12.修改文件权限"></a>12.修改文件权限</h3><pre><code>chmod 777 file.java //file.java的权限-rwxrwxrwx，r表示读、w表示写、x表示可执行</code></pre><h3 id="13-压缩文件"><a href="#13-压缩文件" class="headerlink" title="13.压缩文件"></a>13.压缩文件</h3><pre><code>tar -czf test.tar.gz /test1 /test2</code></pre><h3 id="14-列出压缩文件列表"><a href="#14-列出压缩文件列表" class="headerlink" title="14.列出压缩文件列表"></a>14.列出压缩文件列表</h3><pre><code>tar -tzf test.tar.gz</code></pre><h3 id="15-解压文件"><a href="#15-解压文件" class="headerlink" title="15.解压文件"></a>15.解压文件</h3><pre><code>tar -xvzf test.tar.gz</code></pre><h3 id="16-查看文件头10行"><a href="#16-查看文件头10行" class="headerlink" title="16.查看文件头10行"></a>16.查看文件头10行</h3><pre><code>head -n 10 example.txt</code></pre><h3 id="17-查看文件尾10行"><a href="#17-查看文件尾10行" class="headerlink" title="17.查看文件尾10行"></a>17.查看文件尾10行</h3><pre><code>tail -n 10 example.txt</code></pre><h3 id="18-查看日志类型文件"><a href="#18-查看日志类型文件" class="headerlink" title="18.查看日志类型文件"></a>18.查看日志类型文件</h3><pre><code>tail -f exmaple.log //这个命令会自动显示新增内容，屏幕只显示10行内容的（可设置）。</code></pre><h3 id="19-使用超级管理员身份执行命令"><a href="#19-使用超级管理员身份执行命令" class="headerlink" title="19.使用超级管理员身份执行命令"></a>19.使用超级管理员身份执行命令</h3><pre><code>sudo rm a.txt 使用管理员身份删除文件</code></pre><h3 id="20-查看端口占用情况"><a href="#20-查看端口占用情况" class="headerlink" title="20.查看端口占用情况"></a>20.查看端口占用情况</h3><pre><code>netstat -tln | grep 8080 查看端口8080的使用情况</code></pre><h3 id="21-查看端口属于哪个程序"><a href="#21-查看端口属于哪个程序" class="headerlink" title="21.查看端口属于哪个程序"></a>21.查看端口属于哪个程序</h3><pre><code>lsof -i :8080</code></pre><h3 id="22-查看进程"><a href="#22-查看进程" class="headerlink" title="22.查看进程"></a>22.查看进程</h3><pre><code>ps aux|grep java 查看java进程
+
+ps aux 查看所有进程</code></pre><h3 id="23-以树状图列出目录的内容"><a href="#23-以树状图列出目录的内容" class="headerlink" title="23.以树状图列出目录的内容"></a>23.以树状图列出目录的内容</h3><pre><code>tree a
+
+ps:Mac下使用tree命令</code></pre><h3 id="24-文件下载"><a href="#24-文件下载" class="headerlink" title="24. 文件下载"></a>24. 文件下载</h3><pre><code>wget http://file.tgz mac下安装wget命令
+
+curl http://file.tgz</code></pre><h3 id="25-网络检测"><a href="#25-网络检测" class="headerlink" title="25. 网络检测"></a>25. 网络检测</h3><pre><code>ping www.just-ping.com</code></pre><h3 id="26-远程登录"><a href="#26-远程登录" class="headerlink" title="26.远程登录"></a>26.远程登录</h3><pre><code>ssh userName@ip</code></pre><h3 id="27-打印信息"><a href="#27-打印信息" class="headerlink" title="27.打印信息"></a>27.打印信息</h3><pre><code>echo $JAVA_HOME 打印java home环境变量的值</code></pre><h3 id="28-java-常用命令"><a href="#28-java-常用命令" class="headerlink" title="28.java 常用命令"></a>28.java 常用命令</h3><pre><code>java javac jps ,jstat ,jmap, jstack</code></pre><h3 id="29-其他命令"><a href="#29-其他命令" class="headerlink" title="29.其他命令"></a>29.其他命令</h3><pre><code>svn git maven</code></pre><h3 id="28-linux命令学习网站"><a href="#28-linux命令学习网站" class="headerlink" title="28.linux命令学习网站:"></a>28.linux命令学习网站:</h3><pre><code>http://explainshell.com/</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck0rt5h7t0000pow1mm8fjykh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="java-java 10的类型推导" class="article article-type-java" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/09/14/java 10的类型推导/" class="article-date">
@@ -212,7 +276,7 @@ var countryToCity = getCities();</code></pre><p>关于var和可读性间的权�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck0jo9x8m00084kw1jhzp62ab" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck0rt5h8j000apow1f411n5f1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -281,7 +345,7 @@ server:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck0jo9x8300034kw1qe3px8kt" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck0rt5h850004pow13gwvee6y" class="article-share-link">Share</a>
       
       
     </footer>
@@ -362,7 +426,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck0jo9x7s00004kw1agk74xgn" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck0rt5h810002pow1yhqigzib" class="article-share-link">Share</a>
       
       
     </footer>
@@ -446,7 +510,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck0jo9x8400044kw1gsxrke41" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck0rt5h8a0008pow1ti95d0yk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -674,7 +738,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck0jo9x8z000b4kw1mrrj0rmg" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck0rt5h8v000cpow1jpzqpmla" class="article-share-link">Share</a>
       
       
     </footer>
@@ -914,7 +978,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck0jo9x8p00094kw1jn2ari2w" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck0rt5h8h0009pow1scpie1jj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1053,7 +1117,7 @@ cloneBean：克隆bean实例</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck0jo9x7y00014kw1ns0w8m0x" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck0rt5h830003pow12d5tdcpr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1144,7 +1208,7 @@ wait_timeout = 10</code></pre><p>指定一个请求的最大连接时间，对�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="ck0jo9x8q000a4kw1v4adgmbb" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/19/mysql数据库高并发优化配置/" data-id="ck0rt5h8l000bpow13meze191" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1259,55 +1323,7 @@ list.stream().forEach(System.out::println);</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="ck0jo9x8700064kw1zg7c2ut0" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-博客网" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/10/博客网/" class="article-date">
-  <time datetime="2019-07-10T10:45:47.000Z" itemprop="datePublished">2019-07-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/10/博客网/">博客网</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>大家好啊！</p>
-<pre><code>public static String getNowLocalDate(String formatter){
-    LocalDate localDate = LocalDate.now();
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formatter);
-    return localDate.format(dateTimeFormatter);
-}
-
-public static String getNowLocalTime(String formatter){
-    LocalTime localTime = LocalTime.now();
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(formatter);
-    return localTime.format(timeFormatter);
-}</code></pre><p>这是我第一篇博客！zhuleilei</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/10/博客网/" data-id="ck0jo9x8600054kw1ipwvsj0h" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/11/stream/" data-id="ck0rt5h890007pow1zp4oqdsv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1353,6 +1369,10 @@ public static String getNowLocalTime(String formatter){
       <ul>
         
           <li>
+            <a href="/my-blog/2019/09/20/java开发必会的linux命令/">java开发必会的linux命令</a>
+          </li>
+        
+          <li>
             <a href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
           </li>
         
@@ -1366,10 +1386,6 @@ public static String getNowLocalTime(String formatter){
         
           <li>
             <a href="/my-blog/2019/08/23/sql技巧/">sql技巧</a>
-          </li>
-        
-          <li>
-            <a href="/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/">Java 8新的时间日期库的20个使用实例</a>
           </li>
         
       </ul>
