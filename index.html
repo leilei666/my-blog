@@ -84,9 +84,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="一、引入"><a href="#一、引入" class="headerlink" title="一、引入"></a>一、引入</h3><pre><code>原子是世界上的最小单位，具有不可分割性。比如 a=0；（a非long和double类型） 这个操作是不可分割的，那么我们说这个操作是原子操作。再比如：a++；</code></pre><p>这个操作实际是a = a + 1；是可分割的，所以他不是一个原子操作。非原子操作都会存在线程安全问题，需要我们使用同步技术（sychronized）来让它变成一</p>
+        <h3 id="一、引入"><a href="#一、引入" class="headerlink" title="一、引入"></a>一、引入</h3><p>原子是世界上的最小单位，具有不可分割性。比如 a=0；（a非long和double类型） 这个操作是不可分割的，那么我们说这个操作是原子操作。再比如：a++；</p>
+<p>这个操作实际是a = a + 1；是可分割的，所以他不是一个原子操作。非原子操作都会存在线程安全问题，需要我们使用同步技术（sychronized）来让它变成一</p>
 <p>个原子操作。</p>
-<pre><code>但是，像i++这种非原子操作，我们除了使用synchroinzed关键字实现同步外，还可以使用java.util.concurrent.atomic提供的线程安全的原子类来实现，例如</code></pre><p>AtomicInteger、AtomicLong、AtomicReference等。下面我们就基于AtomicInteger为例，来看看其内部实现。</p>
+<p>但是，像i++这种非原子操作，我们除了使用synchroinzed关键字实现同步外，还可以使用java.util.concurrent.atomic提供的线程安全的原子类来实现，例如</p>
+<p>AtomicInteger、AtomicLong、AtomicReference等。下面我们就基于AtomicInteger为例，来看看其内部实现。</p>
 <h3 id="二、AtomicInteger的内部实现"><a href="#二、AtomicInteger的内部实现" class="headerlink" title="二、AtomicInteger的内部实现"></a>二、AtomicInteger的内部实现</h3><p>public class AtomicInteger extends Number implements java.io.Serializable {<br>    private static final long serialVersionUID = 6214790243416807050L;</p>
 <pre><code>// setup to use Unsafe.compareAndSwapInt for updates
 private static final Unsafe unsafe = Unsafe.getUnsafe();
@@ -127,17 +129,21 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
 <p>（5）线程1重新获取内存地址V的当前值，并重新计算想要修改的新值。此时对线程1来说，A=11，B=12。这个重新尝试的过程被称为自旋。</p>
 <p>（6）这一次比较幸运，没有其他线程改变地址V的值。线程1进行Compare，发现A和地址V的实际值是相等的。</p>
 <p>（7）线程1进行替换，把地址V的值替换为B，也就是12。</p>
-<pre><code>对比Synchronized，我们可以发现，Synchronized属于悲观锁，悲观地认为程序中的并发情况严重，所以严防死守。CAS属于乐观锁，乐观地认为程序中的并发情况不那么</code></pre><p>严重，所以让线程不断去尝试更新。</p>
+<p>对比Synchronized，我们可以发现，Synchronized属于悲观锁，悲观地认为程序中的并发情况严重，所以严防死守。CAS属于乐观锁，乐观地认为程序中的并发情况不那么</p>
+<p>严重，所以让线程不断去尝试更新。</p>
 <p>但是CAS机制通常也存在以下缺点：</p>
 <p>（1）ABA问题</p>
-<pre><code>如果V的初始值是A，在准备赋值的时候检查到它仍然是A，那么能说它没有改变过吗？也许V经历了这样一个过程：它先变成了B，又变成了A，使用CAS检查时</code></pre><p>以为它没变，其实却已经改变过了。</p>
+<p>   如果V的初始值是A，在准备赋值的时候检查到它仍然是A，那么能说它没有改变过吗？也许V经历了这样一个过程：它先变成了B，又变成了A，使用CAS检查时</p>
+<p>以为它没变，其实却已经改变过了。</p>
 <p>（2）CPU开销较大</p>
-<pre><code>在并发量比较高的情况下，如果许多线程反复尝试更新某一个变量，却又一直更新不成功，循环往复，会给CPU带来很大的压力。</code></pre><p>（3）不能保证代码块的原子性</p>
-<pre><code>CAS机制所保证的只是一个变量的原子性操作，而不能保证整个代码块的原子性。比如需要保证3个变量共同进行原子性的更新，就不得不使用Synchronized了。</code></pre>
+<p> 在并发量比较高的情况下，如果许多线程反复尝试更新某一个变量，却又一直更新不成功，循环往复，会给CPU带来很大的压力。</p>
+<p>（3）不能保证代码块的原子性</p>
+<p> CAS机制所保证的只是一个变量的原子性操作，而不能保证整个代码块的原子性。比如需要保证3个变量共同进行原子性的更新，就不得不使用Synchronized了。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck1nbjxed0002pcw1v3cb3084" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck1nbmkow00038gw1us8uk155" class="article-share-link">Share</a>
       
       
     </footer>
@@ -216,7 +222,7 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck1nbjxef0003pcw1koxdaeb6" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck1nbmkov00028gw1a8vga681" class="article-share-link">Share</a>
       
       
     </footer>
@@ -280,7 +286,7 @@ curl http://file.tgz</code></pre><h3 id="25-网络检测"><a href="#25-网络检
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck1nbjxeg0004pcw1oto87cxn" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck1nbmkoy00048gw16jtvwhzs" class="article-share-link">Share</a>
       
       
     </footer>
@@ -440,7 +446,7 @@ var countryToCity = getCities();</code></pre><p>关于var和可读性间的权�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck1nbjxf3000cpcw15jccmg4k" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck1nbmkpf000c8gw14h41t9h8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -509,7 +515,7 @@ server:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck1nbjxeh0005pcw1gav9al30" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck1nbmkp100068gw1lszx9mn5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -590,7 +596,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck1nbjxeb0001pcw1yd7qqkt4" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck1nbmkom00008gw1fxhtf9gc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -674,7 +680,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck1nbjxej0006pcw1hhimvza2" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck1nbmkp400088gw1fczdcc5l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -902,7 +908,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck1nbjxfd000epcw1k87l4zrd" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck1nbmkpr000e8gw1y6x33k8o" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1142,7 +1148,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck1nbjxf1000bpcw199kpb4g1" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck1nbmkpd000b8gw1c08lr7uc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1281,7 +1287,7 @@ cloneBean：克隆bean实例</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck1nbjxek0007pcw1fa1xa7n5" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck1nbmkoz00058gw1sehspwsa" class="article-share-link">Share</a>
       
       
     </footer>
