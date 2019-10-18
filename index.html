@@ -62,6 +62,301 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Freemarker的基本语法及入门基础" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" class="article-date">
+  <time datetime="2019-10-18T09:14:09.000Z" itemprop="datePublished">2019-10-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/">Freemarker的基本语法及入门基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、freemarker模板文件-ftl-的基本组成部分"><a href="#一、freemarker模板文件-ftl-的基本组成部分" class="headerlink" title="一、freemarker模板文件(*.ftl)的基本组成部分"></a>一、freemarker模板文件(*.ftl)的基本组成部分</h3><ol>
+<li>文本：直接输出的内容部分</li>
+<li>注释：不会输出的内容，格式为&lt;#–  注释内容  –&gt;</li>
+<li>取值(插值)：代替输出数据模型的部分，格式为${数据模型}或#{数据模型}</li>
+<li>ftl指令：Freemarker指令，类似于HTML标记。<pre><code>内建指令：开始标签:&lt;#directivename parameter&gt;     
+         结束标签:&lt;/#directivename&gt;      
+         空标签:&lt;#directivename parameter/&gt;   
+自定义指令：开始标签:&lt;@directivename parameter&gt;       
+           结束标签:&lt;/@directivename&gt;      
+           空标签:&lt;@directivename parameter/&gt;
+至于什么是内建指令，什么是自定义指令   我会在下面叙述到。</code></pre></li>
+</ol>
+<h3 id="二、Freemarker语法及使用方法"><a href="#二、Freemarker语法及使用方法" class="headerlink" title="二、Freemarker语法及使用方法"></a>二、Freemarker语法及使用方法</h3><ol>
+<li><p>取值(插值)指令及适用类型：</p>
+<pre><code>(1) ${var}
+        适用类型：java中常用的八大基本类型以及我们的String引用类型，但是，freemarker中boolean类型显示时true==yes  false==no
+        示例：
+                在后台文件中定义变量
+                        String strVar = &quot;世界你好&quot;;
+                        int intVar = 10;
+                        boolean booVar = true;
+                在页面中获取变量：
+                        String获取：&lt;font color=&quot;red&quot;&gt; ${strVar} &lt;/font&gt;&lt;br&gt;
+                        int获取：&lt;font color=&quot;red&quot;&gt; ${intVar} &lt;/font&gt;&lt;br&gt;
+                        boolean获取：&lt;font color=&quot;red&quot;&gt; ${booVar?string(&quot;yes&quot;,&quot;no&quot;)} &lt;/font&gt;
+                展示结果：
+                        String获取：世界你好
+                        int获取：10
+                        boolean获取：yes
+(2)${var!}
+        适用类型：对 null 或者不存在的对象进行取值，可以设置默认值，例：${var!&apos;我是默认值&apos;}    即，有值时显示正常值，无值时显示默认值
+        示例：
+                在后台文件中定义变量
+                        String strVar = &quot;世界你好&quot;;
+                        String str = null;
+                在页面中获取变量：
+                        String获取：&lt;font color=&quot;red&quot;&gt; ${strVar!&quot;我是空&quot;} &lt;/font&gt;&lt;br&gt;
+                        str获取：&lt;font color=&quot;red&quot;&gt; ${str!} &lt;/font&gt;&lt;br&gt;
+                        str获取：&lt;font color=&quot;red&quot;&gt; ${str!&quot;默认&quot;} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        String获取：世界你好
+                        str获取：
+                        str获取：默认
+(3)${封装对象.属性}
+        适用类型：对封装对象进行取值，例：${User.name}
+        示例：
+                在后台文件中封装对象User[ name,  age ]
+                        String name = &quot;姓名&quot;;
+                        int age = 18;
+                在页面中获取变量：
+                        name获取：&lt;font color=&quot;red&quot;&gt; ${User.name} &lt;/font&gt;&lt;br&gt;
+                        age获取：&lt;font color=&quot;red&quot;&gt; ${User.age} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        name获取：姓名
+                        age获取：18
+(4)${date?String(&apos;yyyy-MM-dd&apos;)}
+        适用类型：对日期格式进行取值，在这里我要强调的是，定义Date类型的变量时，java.util.Date无法输出日期，须使用java.sql.Date
+        示例：
+                在后台文件中定义变量
+                        java.sql.Date date = new Date().getTime();
+                        java.sql.Date time = new Date().getTime();
+                        java.sql.Date datetime = new Date().getTime();
+                在页面中获取变量：
+                        date获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;yyyy-MM-dd&apos;)} &lt;/font&gt;&lt;br&gt;
+                        time获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;HH:mm:ss&apos;)} &lt;/font&gt;&lt;br&gt;
+                        datetime获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;yyyy-MM-dd HH:mm:ss&apos;)} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        name获取：姓名
+                        age获取：18
+(5)${var?html}
+        适用类型：转义HTML内容
+        示例：
+                在后台文件中封装变量Menu[ name, model ]
+                        Menu m = new Menu();
+                        m.setName(&quot; freemarker &quot;);
+                        m.setModel(&quot;&lt;font color = &apos;red&apos;&gt;我只是个菜单&lt;/font&gt;&quot;);
+                在页面中获取变量：
+                        非转义获取：&lt;font color=&quot;red&quot;&gt; ${m.model} &lt;/font&gt;&lt;br&gt;
+                        转义获取： ${m.model?html} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        非转义获取：我只是个菜单
+                        转义获取：&lt;font color = &apos;red&apos;&gt;我只是个菜单&lt;/font&gt;
+(6)&lt;#assign num = 100 /&gt;
+        适用类型：定义变量，支持计算和赋值
+        示例：
+                在页面中定义变量：
+                        &lt;#assign num = 100 /&gt;
+                        num获取：&lt;font color=&quot;red&quot;&gt; ${num)} &lt;/font&gt;&lt;br&gt;
+                        计算结果：&lt;font color=&quot;red&quot;&gt; ${num * 10} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        num获取：100
+                        计算结果：1000
+(7)对List集合进行取值
+        &lt;#list  list集合  as  item&gt;
+               ${item}    --取值
+        &lt;/#list&gt;
+        示例：
+                在后台文件中定义变量
+                        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();
+                        strList.add(&quot;第一个值&quot;);
+                        strList.add(&quot;第二个值&quot;);
+                        strList.add(&quot;第三个值&quot;);
+                在页面中获取变量：
+                        &lt;#list  strList  as  item&gt;
+                               ${item!}&lt;br/&gt;    --取值
+                        &lt;/#list&gt;
+                展示结果：
+                        第一个值
+                        第二个值
+                        第三个值
+(8)对Map集合进行取值
+        &lt;#list map?keys as key&gt;
+               ${key}:${map[key]}
+        &lt;/#list&gt;
+        示例：
+                在后台文件中定义变量
+                        Map&lt;String, Object&gt; m = new HashMap&lt;String, Object&gt;();
+                        m.put(&quot;name&quot;,&quot;姓名&quot;);
+                        m.put(&quot;age&quot;,18);
+                        m.put(&quot;sex&quot;,&quot;男&quot;);
+                在页面中获取变量：
+                         &lt;#list m?keys as key&gt;
+                                ${key}:${m[key]}
+                         &lt;/#list&gt;
+                展示结果：
+                        name：姓名
+                        age：18
+                        sex：男</code></pre></li>
+<li><p>条件判断指令：</p>
+<pre><code>(1) if
+        格式：&lt;#if 条件&gt;
+                        输出
+                     &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 18 /&gt;&lt;br&gt;
+                        &lt;#if age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; age = 18&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        age = 18
+(2) if - else
+        格式：&lt;#if 条件&gt;
+                        输出
+                    &lt;#else&gt;
+                        输出
+                    &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 20 /&gt;&lt;br&gt;
+                        &lt;#if age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; age = 18&lt;/font&gt;
+                        &lt;#else&gt;
+                                &lt;font color=&quot;red&quot;&gt; age != 18&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        age != 18
+(3) if - elseif - else
+        格式：&lt;#if 条件1&gt;
+                        输出
+                    &lt;#elseif 条件2&gt;
+                        输出
+                    &lt;#else&gt;
+                        输出
+                    &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 20 /&gt;&lt;br&gt;
+                        &lt;#if age &amp;gt; 18&gt;
+                                &lt;font color=&quot;red&quot;&gt;青年&lt;/font&gt;
+                        &lt;#elseif age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; 成年&lt;/font&gt;
+                        &lt;#else&gt;
+                                &lt;font color=&quot;red&quot;&gt; 少年&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        成年
+(4) switch  --常与case break default一起使用  参数可为字符串
+        格式：&lt;#switch var&gt;
+                    &lt;#case 条件1&gt;
+                          输出
+                    &lt;#break&gt;
+                    &lt;#case 条件2&gt;
+                          输出
+                    &lt;#break&gt;
+                    &lt;#default&gt;
+                          输出
+                    &lt;/#switch&gt;
+        示例：
+                在页面中定义变量并判断：
+                       &lt;#switch var=&quot;星期一&quot;&gt;
+                       &lt;#case &quot;星期一&quot;&gt;
+                               油焖大虾
+                       &lt;#break&gt;
+                       &lt;#case &quot;星期二&quot;&gt;
+                               炸酱面
+                       &lt;#break&gt;
+                       &lt;#default&gt;
+                               肯德基
+                       &lt;/#switch&gt;
+                展示结果：
+                        油焖大虾</code></pre></li>
+<li><p>自定义函数、自定义指令：</p>
+<pre><code>(1) 自定义函数
+        实现TemplateMthodModelEx
+(2) 自定义指令
+        实现TemplateDirectiveModel
+        示例：
+                &lt;@自定义指令名称 入参(key-value格式) ; 出参(list格式)&gt;
+                        运行条件
+                &lt;/@自定义指令名称&gt;
+
+                PS:不同的返回值用逗号( , )间隔开</code></pre></li>
+</ol>
+<p>4.常用内建函数、macro(宏指令)、function(函数指令)：</p>
+<pre><code>(1) 常用内建函数
+        处理字符串：
+             substring                                          截取字符串，包头不包尾（下标）
+             cap_first                                          第一个字母大写
+             end_with                                           以什么字母结尾    
+             contains                                            是否包含目标字符串
+             date  datetime  time                       转换成日期格式
+             starts_with                                      以什么字母开头
+             index_of                                          返回某个指定的字符串值在字符串中首次出现的位置（下标）
+             last_index_of                                  获取指定字符出现的最后位置（下标）
+             split                                                  分隔
+             trim                                                  去两端空格
+        处理数字：
+             string                                              
+             x?string(&quot;0.##&quot;)                          变成小数点后几位
+             round                                              四舍五入
+             floor                                               去掉小数点
+             ceiling                                             近1   变成整数
+        处理list:
+              first:                                              取List值第一个值
+              last:                                                取List值最后一个值
+              seq_contains:                                是否包含指定字符
+              seq_index_of:                               指定字符所在位置
+              size:                                                集合大小
+               reverse:                                          集合倒序排列
+              sort:                                                对集合进行排序
+              sort_by:                                         根据某一个属性排序
+              chunk:                                            分块处理
+        其他:
+              is_string:                                      是否为字符类型
+              is_number:                                    是否为整数类型
+              is_method:                                   是否为方法
+              ():                                                  判断整个变量
+              has_content:                                判断对象是否为空或不存在
+              eval：                                           求值
+(2) macro(宏指令)
+        调用：&lt;@macro_name param /&gt;
+        语法：&lt;#macro  变量名  参数&gt;  
+                            &lt;#nested/&gt;  
+                    &lt;/#macro&gt;
+(3) function(函数指令)
+        调用：${function_name(param)}
+        语法：&lt;#function  变量名  参数&gt;  
+                    &lt;#return&gt;  
+                    &lt;/#function&gt;</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" data-id="ck1vxeiw7000bocw1lzlhdnl8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-java原子类及内部原理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/10/12/java原子类及内部原理/" class="article-date">
@@ -143,7 +438,7 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck1nbmkow00038gw1us8uk155" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck1vxeivq0003ocw1p7zfgslb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -222,7 +517,7 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck1nbmkov00028gw1a8vga681" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck1vxeivo0002ocw1num0abe3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -286,7 +581,7 @@ curl http://file.tgz</code></pre><h3 id="25-网络检测"><a href="#25-网络检
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck1nbmkoy00048gw16jtvwhzs" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck1vxeivu0006ocw1rm374ese" class="article-share-link">Share</a>
       
       
     </footer>
@@ -446,7 +741,7 @@ var countryToCity = getCities();</code></pre><p>关于var和可读性间的权�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck1nbmkpf000c8gw14h41t9h8" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck1vxeiw9000docw1pn6372xo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -515,7 +810,7 @@ server:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck1nbmkp100068gw1lszx9mn5" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck1vxeivy0009ocw1q401tni9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -596,7 +891,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck1nbmkom00008gw1fxhtf9gc" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck1vxeivf0000ocw1sge5o33g" class="article-share-link">Share</a>
       
       
     </footer>
@@ -680,7 +975,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck1nbmkp400088gw1fczdcc5l" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck1vxeivx0008ocw16bjb0m30" class="article-share-link">Share</a>
       
       
     </footer>
@@ -908,7 +1203,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck1nbmkpr000e8gw1y6x33k8o" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck1vxeiwl000focw1m057mi2v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1148,146 +1443,7 @@ public T get() {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck1nbmkpd000b8gw1c08lr7uc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-java常用工具类" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/07/26/java常用工具类/" class="article-date">
-  <time datetime="2019-07-26T06:51:38.000Z" itemprop="datePublished">2019-07-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/07/26/java常用工具类/">java常用工具类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一-org-apache-commons-io-IOUtils"><a href="#一-org-apache-commons-io-IOUtils" class="headerlink" title="一. org.apache.commons.io.IOUtils"></a>一. org.apache.commons.io.IOUtils</h3><pre><code>closeQuietly：关闭一个IO流、socket、或者selector且不抛出异常，通常放在finally块
-toString：转换IO流、 Uri、 byte[]为String
-copy：IO流数据复制，从输入流写到输出流中，最大支持2GB
-toByteArray：从输入流、URI获取byte[]
-write：把字节. 字符等写入输出流
-toInputStream：把字符转换为输入流
-readLines：从输入流中读取多行数据，返回List&lt;String&gt;
-copyLarge：同copy，支持2GB以上数据的复制
-lineIterator：从输入流返回一个迭代器，根据参数要求读取的数据量，全部读取，如果数据不够，则失败</code></pre><h3 id="二-org-apache-commons-io-FileUtils"><a href="#二-org-apache-commons-io-FileUtils" class="headerlink" title="二. org.apache.commons.io.FileUtils"></a>二. org.apache.commons.io.FileUtils</h3><pre><code>deleteDirectory：删除文件夹
-readFileToString：以字符形式读取文件内容
-deleteQueitly：删除文件或文件夹且不会抛出异常
-copyFile：复制文件
-writeStringToFile：把字符写到目标文件，如果文件不存在，则创建
-forceMkdir：强制创建文件夹，如果该文件夹父级目录不存在，则创建父级
-write：把字符写到指定文件中
-listFiles：列举某个目录下的文件(根据过滤器)
-copyDirectory：复制文件夹
-forceDelete：强制删除文件</code></pre><h3 id="三-org-apache-commons-lang-StringUtils"><a href="#三-org-apache-commons-lang-StringUtils" class="headerlink" title="三. org.apache.commons.lang.StringUtils"></a>三. org.apache.commons.lang.StringUtils</h3><pre><code>isBlank：字符串是否为空 (trim后判断)
-isEmpty：字符串是否为空 (不trim并判断)
-equals：字符串是否相等
-join：合并数组为单一字符串，可传分隔符
-split：分割字符串
-EMPTY：返回空字符串
-trimToNull：trim后为空字符串则转换为null
-replace：替换字符串</code></pre><h3 id="四-org-apache-http-util-EntityUtils"><a href="#四-org-apache-http-util-EntityUtils" class="headerlink" title="四. org.apache.http.util.EntityUtils"></a>四. org.apache.http.util.EntityUtils</h3><pre><code>toString：把Entity转换为字符串
-consume：确保Entity中的内容全部被消费。可以看到源码里又一次消费了Entity的内容，假如用户没有消费，那调用Entity时候将会把它消费掉
-toByteArray：把Entity转换为字节流
-consumeQuietly：和consume一样，但不抛异常
-getContentCharset：获取内容的编码</code></pre><h3 id="五-org-apache-commons-lang3-StringUtils"><a href="#五-org-apache-commons-lang3-StringUtils" class="headerlink" title="五. org.apache.commons.lang3.StringUtils"></a>五. org.apache.commons.lang3.StringUtils</h3><pre><code>isBlank：字符串是否为空 (trim后判断)
-isEmpty：字符串是否为空 (不trim并判断)
-equals：字符串是否相等
-join：合并数组为单一字符串，可传分隔符
-split：分割字符串
-EMPTY：返回空字符串
-replace：替换字符串
-capitalize：首字符大写</code></pre><h3 id="六-org-apache-commons-io-FilenameUtils"><a href="#六-org-apache-commons-io-FilenameUtils" class="headerlink" title="六. org.apache.commons.io.FilenameUtils"></a>六. org.apache.commons.io.FilenameUtils</h3><pre><code>getExtension：返回文件后缀名
-getBaseName：返回文件名，不包含后缀名
-getName：返回文件全名
-concat：按命令行风格组合文件路径(详见方法注释)
-removeExtension：删除后缀名
-normalize：使路径正常化
-wildcardMatch：匹配通配符
-seperatorToUnix：路径分隔符改成unix系统格式的，即/
-getFullPath：获取文件路径，不包括文件名
-isExtension：检查文件后缀名是不是传入参数(List&lt;String&gt;)中的一个</code></pre><h3 id="七-org-springframework-util-StringUtils"><a href="#七-org-springframework-util-StringUtils" class="headerlink" title="七. org.springframework.util.StringUtils"></a>七. org.springframework.util.StringUtils</h3><pre><code>hasText：检查字符串中是否包含文本
-hasLength：检测字符串是否长度大于0
-isEmpty：检测字符串是否为空（若传入为对象，则判断对象是否为null）
-commaDelimitedStringToArray：逗号分隔的String转换为数组
-collectionToDelimitedString：把集合转为CSV格式字符串
-replace 替换字符串
-7. delimitedListToStringArray：相当于split
-uncapitalize：首字母小写
-collectionToDelimitedCommaString：把集合转为CSV格式字符串
-tokenizeToStringArray：和split基本一样，但能自动去掉空白的单词</code></pre><h3 id="八-org-apache-commons-lang-ArrayUtils"><a href="#八-org-apache-commons-lang-ArrayUtils" class="headerlink" title="八. org.apache.commons.lang.ArrayUtils"></a>八. org.apache.commons.lang.ArrayUtils</h3><pre><code>contains：是否包含某字符串
-addAll：添加整个数组
-clone：克隆一个数组
-isEmpty：是否空数组
-add：向数组添加元素
-subarray：截取数组
-indexOf：查找某个元素的下标
-isEquals：比较数组是否相等
-toObject：基础类型数据数组转换为对应的Object数组</code></pre><h3 id="九-org-apache-commons-lang-StringEscapeUtils"><a href="#九-org-apache-commons-lang-StringEscapeUtils" class="headerlink" title="九. org.apache.commons.lang.StringEscapeUtils"></a>九. org.apache.commons.lang.StringEscapeUtils</h3><pre><code>参考十五：org.apache.commons.lang3.StringEscapeUtils</code></pre><h3 id="十-org-apache-http-client-utils-URLEncodedUtils"><a href="#十-org-apache-http-client-utils-URLEncodedUtils" class="headerlink" title="十. org.apache.http.client.utils.URLEncodedUtils"></a>十. org.apache.http.client.utils.URLEncodedUtils</h3><pre><code>format：格式化参数，返回一个HTTP POST或者HTTP PUT可用application/x-www-form-urlencoded字符串
-parse：把String或者URI等转换为List&lt;NameValuePair&gt;</code></pre><h3 id="十一-org-apache-commons-codec-digest-DigestUtils"><a href="#十一-org-apache-commons-codec-digest-DigestUtils" class="headerlink" title="十一. org.apache.commons.codec.digest.DigestUtils"></a>十一. org.apache.commons.codec.digest.DigestUtils</h3><pre><code>md5Hex：MD5加密，返回32位字符串
-sha1Hex：SHA-1加密
-sha256Hex：SHA-256加密
-sha512Hex：SHA-512加密
-md5：MD5加密，返回16位字符串</code></pre><h3 id="十二-org-apache-commons-collections-CollectionUtils"><a href="#十二-org-apache-commons-collections-CollectionUtils" class="headerlink" title="十二. org.apache.commons.collections.CollectionUtils"></a>十二. org.apache.commons.collections.CollectionUtils</h3><pre><code>isEmpty：是否为空
-select：根据条件筛选集合元素
-transform：根据指定方法处理集合元素，类似List的map()
-filter：过滤元素，雷瑟List的filter()
-find：基本和select一样
-collect：和transform 差不多一样，但是返回新数组
-forAllDo：调用每个元素的指定方法
-isEqualCollection：判断两个集合是否一致</code></pre><h3 id="十三-org-apache-commons-lang3-ArrayUtils"><a href="#十三-org-apache-commons-lang3-ArrayUtils" class="headerlink" title="十三. org.apache.commons.lang3.ArrayUtils"></a>十三. org.apache.commons.lang3.ArrayUtils</h3><pre><code>contains：是否包含某个字符串
-addAll：添加整个数组
-clone：克隆一个数组
-isEmpty：是否空数组
-add：向数组添加元素
-subarray：截取数组
-indexOf：查找某个元素的下标
-isEquals：比较数组是否相等
-toObject：基础类型数据数组转换为对应的Object数组</code></pre><h3 id="十四-org-apache-commons-beanutils-PropertyUtils"><a href="#十四-org-apache-commons-beanutils-PropertyUtils" class="headerlink" title="十四. org.apache.commons.beanutils.PropertyUtils"></a>十四. org.apache.commons.beanutils.PropertyUtils</h3><pre><code>getProperty：获取对象属性值
-setProperty：设置对象属性值
-getPropertyDiscriptor：获取属性描述器
-isReadable：检查属性是否可访问
-copyProperties：复制属性值，从一个对象到另一个对象
-getPropertyDiscriptors：获取所有属性描述器
-isWriteable：检查属性是否可写
-getPropertyType：获取对象属性类型</code></pre><h3 id="十五-org-apache-commons-lang3-StringEscapeUtils"><a href="#十五-org-apache-commons-lang3-StringEscapeUtils" class="headerlink" title="十五. org.apache.commons.lang3.StringEscapeUtils"></a>十五. org.apache.commons.lang3.StringEscapeUtils</h3><pre><code>unescapeHtml4：转义html
-escapeHtml4：反转义html
-escapeXml：转义xml
-unescapeXml：反转义xml
-escapeJava：转义unicode编码
-escapeEcmaScript：转义EcmaScript字符
-unescapeJava：反转义unicode编码
-escapeJson：转义json字符
-escapeXml10：转义Xml10
-
-这个现在已经废弃了，建议使用commons-text包里面的方法。</code></pre><h3 id="十六-org-apache-commons-beanutils-BeanUtils"><a href="#十六-org-apache-commons-beanutils-BeanUtils" class="headerlink" title="十六. org.apache.commons.beanutils.BeanUtils"></a>十六. org.apache.commons.beanutils.BeanUtils</h3><pre><code>copyPeoperties：复制属性值，从一个对象到另一个对象
-getProperty：获取对象属性值
-setProperty：设置对象属性值
-populate：根据Map给属性复制
-copyPeoperty：复制单个值，从一个对象到另一个对象
-cloneBean：克隆bean实例</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/07/26/java常用工具类/" data-id="ck1nbmkoz00058gw1sehspwsa" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck1vxeiw8000cocw19hvrdqvq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1333,6 +1489,10 @@ cloneBean：克隆bean实例</code></pre>
       <ul>
         
           <li>
+            <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/">Freemarker的基本语法及入门基础</a>
+          </li>
+        
+          <li>
             <a href="/my-blog/2019/10/12/java原子类及内部原理/">java原子类及内部原理</a>
           </li>
         
@@ -1346,10 +1506,6 @@ cloneBean：克隆bean实例</code></pre>
         
           <li>
             <a href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
-          </li>
-        
-          <li>
-            <a href="/my-blog/2019/09/07/profile介绍/">profile介绍</a>
           </li>
         
       </ul>

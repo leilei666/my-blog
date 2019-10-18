@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Freemarker的基本语法及入门基础 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、freemarker模板文件(*.ftl)的基本组成部分 文本：直接输出的内容部分 注释：不会输出的内容，格式为&amp;lt;#–  注释内容  –&amp;gt; 取值(插值)：代替输出数据模型的部分，格式为${数据模型}或#{数据模型} ftl指令：Freemarker指令，类似于HTML标记。内建指令：开始标签:&amp;lt;#directivename parameter&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Freemarker的基本语法及入门基础">
+<meta property="og:url" content="https://leilei666.github.io/my-blog/2019/10/18/Freemarker的基本语法及入门基础/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、freemarker模板文件(*.ftl)的基本组成部分 文本：直接输出的内容部分 注释：不会输出的内容，格式为&amp;lt;#–  注释内容  –&amp;gt; 取值(插值)：代替输出数据模型的部分，格式为${数据模型}或#{数据模型} ftl指令：Freemarker指令，类似于HTML标记。内建指令：开始标签:&amp;lt;#directivename parameter&amp;gt;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-10-18T09:21:55.047Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Freemarker的基本语法及入门基础">
+<meta name="twitter:description" content="一、freemarker模板文件(*.ftl)的基本组成部分 文本：直接输出的内容部分 注释：不会输出的内容，格式为&amp;lt;#–  注释内容  –&amp;gt; 取值(插值)：代替输出数据模型的部分，格式为${数据模型}或#{数据模型} ftl指令：Freemarker指令，类似于HTML标记。内建指令：开始标签:&amp;lt;#directivename parameter&amp;gt;">
+  
+    <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/my-blog/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/my-blog/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/my-blog/">Home</a>
+        
+          <a class="main-nav-link" href="/my-blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/my-blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://leilei666.github.io/my-blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Freemarker的基本语法及入门基础" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" class="article-date">
+  <time datetime="2019-10-18T09:14:09.000Z" itemprop="datePublished">2019-10-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Freemarker的基本语法及入门基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、freemarker模板文件-ftl-的基本组成部分"><a href="#一、freemarker模板文件-ftl-的基本组成部分" class="headerlink" title="一、freemarker模板文件(*.ftl)的基本组成部分"></a>一、freemarker模板文件(*.ftl)的基本组成部分</h3><ol>
+<li>文本：直接输出的内容部分</li>
+<li>注释：不会输出的内容，格式为&lt;#–  注释内容  –&gt;</li>
+<li>取值(插值)：代替输出数据模型的部分，格式为${数据模型}或#{数据模型}</li>
+<li>ftl指令：Freemarker指令，类似于HTML标记。<pre><code>内建指令：开始标签:&lt;#directivename parameter&gt;     
+         结束标签:&lt;/#directivename&gt;      
+         空标签:&lt;#directivename parameter/&gt;   
+自定义指令：开始标签:&lt;@directivename parameter&gt;       
+           结束标签:&lt;/@directivename&gt;      
+           空标签:&lt;@directivename parameter/&gt;
+至于什么是内建指令，什么是自定义指令   我会在下面叙述到。</code></pre></li>
+</ol>
+<h3 id="二、Freemarker语法及使用方法"><a href="#二、Freemarker语法及使用方法" class="headerlink" title="二、Freemarker语法及使用方法"></a>二、Freemarker语法及使用方法</h3><ol>
+<li><p>取值(插值)指令及适用类型：</p>
+<pre><code>(1) ${var}
+        适用类型：java中常用的八大基本类型以及我们的String引用类型，但是，freemarker中boolean类型显示时true==yes  false==no
+        示例：
+                在后台文件中定义变量
+                        String strVar = &quot;世界你好&quot;;
+                        int intVar = 10;
+                        boolean booVar = true;
+                在页面中获取变量：
+                        String获取：&lt;font color=&quot;red&quot;&gt; ${strVar} &lt;/font&gt;&lt;br&gt;
+                        int获取：&lt;font color=&quot;red&quot;&gt; ${intVar} &lt;/font&gt;&lt;br&gt;
+                        boolean获取：&lt;font color=&quot;red&quot;&gt; ${booVar?string(&quot;yes&quot;,&quot;no&quot;)} &lt;/font&gt;
+                展示结果：
+                        String获取：世界你好
+                        int获取：10
+                        boolean获取：yes
+(2)${var!}
+        适用类型：对 null 或者不存在的对象进行取值，可以设置默认值，例：${var!&apos;我是默认值&apos;}    即，有值时显示正常值，无值时显示默认值
+        示例：
+                在后台文件中定义变量
+                        String strVar = &quot;世界你好&quot;;
+                        String str = null;
+                在页面中获取变量：
+                        String获取：&lt;font color=&quot;red&quot;&gt; ${strVar!&quot;我是空&quot;} &lt;/font&gt;&lt;br&gt;
+                        str获取：&lt;font color=&quot;red&quot;&gt; ${str!} &lt;/font&gt;&lt;br&gt;
+                        str获取：&lt;font color=&quot;red&quot;&gt; ${str!&quot;默认&quot;} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        String获取：世界你好
+                        str获取：
+                        str获取：默认
+(3)${封装对象.属性}
+        适用类型：对封装对象进行取值，例：${User.name}
+        示例：
+                在后台文件中封装对象User[ name,  age ]
+                        String name = &quot;姓名&quot;;
+                        int age = 18;
+                在页面中获取变量：
+                        name获取：&lt;font color=&quot;red&quot;&gt; ${User.name} &lt;/font&gt;&lt;br&gt;
+                        age获取：&lt;font color=&quot;red&quot;&gt; ${User.age} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        name获取：姓名
+                        age获取：18
+(4)${date?String(&apos;yyyy-MM-dd&apos;)}
+        适用类型：对日期格式进行取值，在这里我要强调的是，定义Date类型的变量时，java.util.Date无法输出日期，须使用java.sql.Date
+        示例：
+                在后台文件中定义变量
+                        java.sql.Date date = new Date().getTime();
+                        java.sql.Date time = new Date().getTime();
+                        java.sql.Date datetime = new Date().getTime();
+                在页面中获取变量：
+                        date获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;yyyy-MM-dd&apos;)} &lt;/font&gt;&lt;br&gt;
+                        time获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;HH:mm:ss&apos;)} &lt;/font&gt;&lt;br&gt;
+                        datetime获取：&lt;font color=&quot;red&quot;&gt; ${date?string(&apos;yyyy-MM-dd HH:mm:ss&apos;)} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        name获取：姓名
+                        age获取：18
+(5)${var?html}
+        适用类型：转义HTML内容
+        示例：
+                在后台文件中封装变量Menu[ name, model ]
+                        Menu m = new Menu();
+                        m.setName(&quot; freemarker &quot;);
+                        m.setModel(&quot;&lt;font color = &apos;red&apos;&gt;我只是个菜单&lt;/font&gt;&quot;);
+                在页面中获取变量：
+                        非转义获取：&lt;font color=&quot;red&quot;&gt; ${m.model} &lt;/font&gt;&lt;br&gt;
+                        转义获取： ${m.model?html} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        非转义获取：我只是个菜单
+                        转义获取：&lt;font color = &apos;red&apos;&gt;我只是个菜单&lt;/font&gt;
+(6)&lt;#assign num = 100 /&gt;
+        适用类型：定义变量，支持计算和赋值
+        示例：
+                在页面中定义变量：
+                        &lt;#assign num = 100 /&gt;
+                        num获取：&lt;font color=&quot;red&quot;&gt; ${num)} &lt;/font&gt;&lt;br&gt;
+                        计算结果：&lt;font color=&quot;red&quot;&gt; ${num * 10} &lt;/font&gt;&lt;br&gt;
+                展示结果：
+                        num获取：100
+                        计算结果：1000
+(7)对List集合进行取值
+        &lt;#list  list集合  as  item&gt;
+               ${item}    --取值
+        &lt;/#list&gt;
+        示例：
+                在后台文件中定义变量
+                        List&lt;String&gt; strList = new ArrayList&lt;String&gt;();
+                        strList.add(&quot;第一个值&quot;);
+                        strList.add(&quot;第二个值&quot;);
+                        strList.add(&quot;第三个值&quot;);
+                在页面中获取变量：
+                        &lt;#list  strList  as  item&gt;
+                               ${item!}&lt;br/&gt;    --取值
+                        &lt;/#list&gt;
+                展示结果：
+                        第一个值
+                        第二个值
+                        第三个值
+(8)对Map集合进行取值
+        &lt;#list map?keys as key&gt;
+               ${key}:${map[key]}
+        &lt;/#list&gt;
+        示例：
+                在后台文件中定义变量
+                        Map&lt;String, Object&gt; m = new HashMap&lt;String, Object&gt;();
+                        m.put(&quot;name&quot;,&quot;姓名&quot;);
+                        m.put(&quot;age&quot;,18);
+                        m.put(&quot;sex&quot;,&quot;男&quot;);
+                在页面中获取变量：
+                         &lt;#list m?keys as key&gt;
+                                ${key}:${m[key]}
+                         &lt;/#list&gt;
+                展示结果：
+                        name：姓名
+                        age：18
+                        sex：男</code></pre></li>
+<li><p>条件判断指令：</p>
+<pre><code>(1) if
+        格式：&lt;#if 条件&gt;
+                        输出
+                     &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 18 /&gt;&lt;br&gt;
+                        &lt;#if age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; age = 18&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        age = 18
+(2) if - else
+        格式：&lt;#if 条件&gt;
+                        输出
+                    &lt;#else&gt;
+                        输出
+                    &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 20 /&gt;&lt;br&gt;
+                        &lt;#if age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; age = 18&lt;/font&gt;
+                        &lt;#else&gt;
+                                &lt;font color=&quot;red&quot;&gt; age != 18&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        age != 18
+(3) if - elseif - else
+        格式：&lt;#if 条件1&gt;
+                        输出
+                    &lt;#elseif 条件2&gt;
+                        输出
+                    &lt;#else&gt;
+                        输出
+                    &lt;/#if&gt;
+        示例：
+                在页面中定义变量并判断条件：
+                        &lt;#assign age = 20 /&gt;&lt;br&gt;
+                        &lt;#if age &amp;gt; 18&gt;
+                                &lt;font color=&quot;red&quot;&gt;青年&lt;/font&gt;
+                        &lt;#elseif age == 18&gt;
+                                &lt;font color=&quot;red&quot;&gt; 成年&lt;/font&gt;
+                        &lt;#else&gt;
+                                &lt;font color=&quot;red&quot;&gt; 少年&lt;/font&gt;
+                        &lt;/#if&gt;
+                展示结果：
+                        成年
+(4) switch  --常与case break default一起使用  参数可为字符串
+        格式：&lt;#switch var&gt;
+                    &lt;#case 条件1&gt;
+                          输出
+                    &lt;#break&gt;
+                    &lt;#case 条件2&gt;
+                          输出
+                    &lt;#break&gt;
+                    &lt;#default&gt;
+                          输出
+                    &lt;/#switch&gt;
+        示例：
+                在页面中定义变量并判断：
+                       &lt;#switch var=&quot;星期一&quot;&gt;
+                       &lt;#case &quot;星期一&quot;&gt;
+                               油焖大虾
+                       &lt;#break&gt;
+                       &lt;#case &quot;星期二&quot;&gt;
+                               炸酱面
+                       &lt;#break&gt;
+                       &lt;#default&gt;
+                               肯德基
+                       &lt;/#switch&gt;
+                展示结果：
+                        油焖大虾</code></pre></li>
+<li><p>自定义函数、自定义指令：</p>
+<pre><code>(1) 自定义函数
+        实现TemplateMthodModelEx
+(2) 自定义指令
+        实现TemplateDirectiveModel
+        示例：
+                &lt;@自定义指令名称 入参(key-value格式) ; 出参(list格式)&gt;
+                        运行条件
+                &lt;/@自定义指令名称&gt;
+
+                PS:不同的返回值用逗号( , )间隔开</code></pre></li>
+</ol>
+<p>4.常用内建函数、macro(宏指令)、function(函数指令)：</p>
+<pre><code>(1) 常用内建函数
+        处理字符串：
+             substring                                          截取字符串，包头不包尾（下标）
+             cap_first                                          第一个字母大写
+             end_with                                           以什么字母结尾    
+             contains                                            是否包含目标字符串
+             date  datetime  time                       转换成日期格式
+             starts_with                                      以什么字母开头
+             index_of                                          返回某个指定的字符串值在字符串中首次出现的位置（下标）
+             last_index_of                                  获取指定字符出现的最后位置（下标）
+             split                                                  分隔
+             trim                                                  去两端空格
+        处理数字：
+             string                                              
+             x?string(&quot;0.##&quot;)                          变成小数点后几位
+             round                                              四舍五入
+             floor                                               去掉小数点
+             ceiling                                             近1   变成整数
+        处理list:
+              first:                                              取List值第一个值
+              last:                                                取List值最后一个值
+              seq_contains:                                是否包含指定字符
+              seq_index_of:                               指定字符所在位置
+              size:                                                集合大小
+               reverse:                                          集合倒序排列
+              sort:                                                对集合进行排序
+              sort_by:                                         根据某一个属性排序
+              chunk:                                            分块处理
+        其他:
+              is_string:                                      是否为字符类型
+              is_number:                                    是否为整数类型
+              is_method:                                   是否为方法
+              ():                                                  判断整个变量
+              has_content:                                判断对象是否为空或不存在
+              eval：                                           求值
+(2) macro(宏指令)
+        调用：&lt;@macro_name param /&gt;
+        语法：&lt;#macro  变量名  参数&gt;  
+                            &lt;#nested/&gt;  
+                    &lt;/#macro&gt;
+(3) function(函数指令)
+        调用：${function_name(param)}
+        语法：&lt;#function  变量名  参数&gt;  
+                    &lt;#return&gt;  
+                    &lt;/#function&gt;</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" data-id="ck1vxeiw7000bocw1lzlhdnl8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/my-blog/2019/10/12/java原子类及内部原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">java原子类及内部原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/">Freemarker的基本语法及入门基础</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/10/12/java原子类及内部原理/">java原子类及内部原理</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/09/27/git命令/">git命令</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/09/20/java开发必会的linux命令/">java开发必会的linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/my-blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/my-blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/my-blog/fancybox/jquery.fancybox.css">
+  <script src="/my-blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/my-blog/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
