@@ -62,6 +62,169 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-springboot定时任务执行" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/11/29/springboot定时任务执行/" class="article-date">
+  <time datetime="2019-11-29T08:26:16.000Z" itemprop="datePublished">2019-11-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/my-blog/2019/11/29/springboot定时任务执行/">springboot定时任务执行</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-定时任务实现的几种方式："><a href="#一-定时任务实现的几种方式：" class="headerlink" title="一.定时任务实现的几种方式："></a>一.定时任务实现的几种方式：</h2><p>1.Timer：这是java自带的java.util.Timer类，这个类允许你调度一个java.util.TimerTask任务。使用这种方式可以让你的程序按照某一个频度执行，但不能在指定时间运行。一般用的较少。<br>2.ScheduledExecutorService：也jdk自带的一个类；是基于线程池设计的定时任务类,每个调度任务都会分配到线程池中的一个线程去执行,也就是说,任务是并发执行,互不影响。<br>3.Spring Task：Spring3.0以后自带的task，可以将它看成一个轻量级的Quartz，而且使用起来比Quartz简单许多。<br>4.Quartz：这是一个功能比较强大的的调度器，可以让你的程序在指定时间执行，也可以按照某一个频度执行，配置起来稍显复杂。</p>
+<h2 id="二-使用Spring-Task"><a href="#二-使用Spring-Task" class="headerlink" title="二.使用Spring Task"></a>二.使用Spring Task</h2><p>1.创建任务类</p>
+<pre><code> 1 @Slf4j
+ 2 @Component
+ 3 public class ScheduledService {
+ 4     @Scheduled(cron = &quot;0/5 * * * * *&quot;)
+ 5     public void scheduled(){
+ 6         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;使用cron  {}&quot;,System.currentTimeMillis());
+ 7     }
+ 8     @Scheduled(fixedRate = 5000)
+ 9     public void scheduled1() {
+10         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;使用fixedRate{}&quot;, System.currentTimeMillis());
+11     }
+12     @Scheduled(fixedDelay = 5000)
+13     public void scheduled2() {
+14         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;fixedDelay{}&quot;,System.currentTimeMillis());
+15     }
+16 }</code></pre><p>2.在主类上使用@EnableScheduling注解开启对定时任务的支持，然后启动项目创建任务类</p>
+<pre><code> 1 import org.springframework.boot.SpringApplication;
+ 2 import org.springframework.boot.autoconfigure.SpringBootApplication;
+ 3 import org.springframework.scheduling.annotation.EnableScheduling;
+ 4 
+ 5 @SpringBootApplication
+ 6 @EnableScheduling
+ 7 public class SpringBootScheduledApplication {
+ 8 
+ 9     public static void main(String[] args) {
+10         SpringApplication.run(SpringBootScheduledApplication.class, args);
+11     }</code></pre><p>3.多线程执行</p>
+<p>在传统的Spring项目中，我们可以在xml配置文件添加task的配置，而在SpringBoot项目中一般使用config配置类的方式添加配置，所以新建一个AsyncConfig类</p>
+<pre><code> 1 @Configuration
+ 2 @EnableAsync
+ 3 public class AsyncConfig {
+ 4 /*
+ 5 此处成员变量应该使用@Value从配置中读取
+ 6 */
+ 7 private int corePoolSize = 10;
+ 8 private int maxPoolSize = 200;
+ 9 private int queueCapacity = 10;
+10 @Bean
+11 public Executor taskExecutor() {
+12 ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+13 executor.setCorePoolSize(corePoolSize);
+14 executor.setMaxPoolSize(maxPoolSize);
+15 executor.setQueueCapacity(queueCapacity);
+16 executor.initialize();
+17 return executor;
+18 }
+19 }</code></pre><p>@Configuration：表明该类是一个配置类 </p>
+<p>@EnableAsync：开启异步事件的支持</p>
+<p>然后在定时任务的类或者方法上添加@Async 。最后重启项目，每一个任务都是在不同的线程中</p>
+<p>4.执行时间的配置</p>
+<p>在上面的定时任务中，我们在方法上使用@Scheduled注解来设置任务的执行时间，并且使用三种属性配置方式：</p>
+<pre><code>fixedRate：定义一个按一定频率执行的定时任务
+fixedDelay：定义一个按一定频率执行的定时任务，与上面不同的是，改属性可以配合initialDelay， 定义该任务延迟执行时间。
+cron：通过表达式来配置任务执行时间</code></pre><p>5.cron表达式详解</p>
+<p>一个cron表达式有至少6个（也可能7个）有空格分隔的时间元素。按顺序依次为：</p>
+<pre><code>秒（0~59）
+分钟（0~59）
+3 小时（0~23）
+4 天（0~31）
+5 月（0~11）
+6 星期（1~7 1=SUN 或 SUN，MON，TUE，WED，THU，FRI，SAT）
+年份（1970－2099）</code></pre><p>其中每个元素可以是一个值(如6),一个连续区间(9-12),一个间隔时间(8-18/4)(/表示每隔4小时),一个列表(1,3,5),通配符。由于”月份中的日期”和”星期中的日期”这两个元素互斥的,必须要对其中一个设置。配置实例：</p>
+<pre><code>每隔5秒执行一次：/5 * ?
+每隔1分钟执行一次：0 /1 ?
+0 0 10,14,16 ? 每天上午10点，下午2点，4点
+0 0/30 9-17 ? 朝九晚五工作时间内每半小时
+0 0 12 ? * WED 表示每个星期三中午12点
+“0 0 12 ?” 每天中午12点触发
+“0 15 10 ? “ 每天上午10:15触发
+“0 15 10 ?” 每天上午10:15触发
+“0 15 10 ? *” 每天上午10:15触发
+“0 15 10 ? 2005” 2005年的每天上午10:15触发
+“0 14 * ?” 在每天下午2点到下午2:59期间的每1分钟触发
+“0 0/5 14 ?” 在每天下午2点到下午2:55期间的每5分钟触发
+“0 0/5 14,18 ?” 在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发
+“0 0-5 14 ?” 在每天下午2点到下午2:05期间的每1分钟触发
+“0 10,44 14 ? 3 WED” 每年三月的星期三的下午2:10和2:44触发
+“0 15 10 ? * MON-FRI” 周一至周五的上午10:15触发
+“0 15 10 15 * ?” 每月15日上午10:15触发
+“0 15 10 L * ?” 每月最后一日的上午10:15触发
+“0 15 10 ? * 6L” 每月的最后一个星期五上午10:15触发
+“0 15 10 ? * 6L 2002-2005” 2002年至2005年的每月的最后一个星期五上午10:15触发
+“0 15 10 ? * 6#3” 每月的第三个星期五上午10:15触发</code></pre><h2 id="三-整合Quartz"><a href="#三-整合Quartz" class="headerlink" title="三.整合Quartz"></a>三.整合Quartz</h2><p>1.添加依赖<br>如果SpringBoot版本是2.0.0以后的，则在spring-boot-starter中已经包含了quart的依赖，则可以直接使用spring-boot-starter-quartz依赖：</p>
+<pre><code>1 &lt;dependency&gt;
+2     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+3     &lt;artifactId&gt;spring-boot-starter-quartz&lt;/artifactId&gt;
+4 &lt;/dependency&gt;</code></pre><p>如果是1.5.9则要使用以下添加依赖：</p>
+<pre><code>1 &lt;dependency&gt;
+2   &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+3   &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+4   &lt;version&gt;2.3.0&lt;/version&gt;
+5 &lt;/dependency&gt;
+6 &lt;dependency&gt;
+7   &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+8   &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
+9 &lt;/dependency&gt;</code></pre><p>2.创建任务类TestQuartz，该类主要是继承了QuartzJobBean</p>
+<pre><code> 1 public class TestQuartz extends QuartzJobBean {
+ 2     /**
+ 3      * 执行定时任务
+ 4      * @param jobExecutionContext
+ 5      * @throws JobExecutionException
+ 6      */
+ 7     @Override
+ 8     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+ 9         System.out.println(&quot;quartz task &quot;+new Date());
+10     }
+11 }</code></pre><p>3.创建配置类QuartzConfig</p>
+<pre><code> 1 @Configuration
+ 2 public class QuartzConfig {
+ 3     @Bean
+ 4     public JobDetail teatQuartzDetail(){
+ 5         return JobBuilder.newJob(TestQuartz.class).withIdentity(&quot;testQuartz&quot;).storeDurably().build();
+ 6     }
+ 7 
+ 8     @Bean
+ 9     public Trigger testQuartzTrigger(){
+10         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+11                 .withIntervalInSeconds(10)  //设置时间周期单位秒
+12                 .repeatForever();
+13         return TriggerBuilder.newTrigger().forJob(teatQuartzDetail())
+14                 .withIdentity(&quot;testQuartz&quot;)
+15                 .withSchedule(scheduleBuilder)
+16                 .build();
+17     }
+18 }</code></pre><p>4.启动项目</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/11/29/springboot定时任务执行/" data-id="ck3jwi94g0005z4w12cg1e3dl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Freemarker的基本语法及入门基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" class="article-date">
@@ -347,7 +510,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" data-id="ck1vxeiw7000bocw1lzlhdnl8" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" data-id="ck3jwi95c000cz4w1nxuzh08h" class="article-share-link">Share</a>
       
       
     </footer>
@@ -438,7 +601,7 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck1vxeivq0003ocw1p7zfgslb" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/10/12/java原子类及内部原理/" data-id="ck3jwi94a0003z4w1xps5lk8r" class="article-share-link">Share</a>
       
       
     </footer>
@@ -517,7 +680,7 @@ private volatile int value;</code></pre><p>这段代码我们需要注意一下�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck1vxeivo0002ocw1num0abe3" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/27/git命令/" data-id="ck3jwi9470002z4w1f5f7t95m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -581,7 +744,7 @@ curl http://file.tgz</code></pre><h3 id="25-网络检测"><a href="#25-网络检
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck1vxeivu0006ocw1rm374ese" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/20/java开发必会的linux命令/" data-id="ck3jwi94c0004z4w1p9rlz68c" class="article-share-link">Share</a>
       
       
     </footer>
@@ -741,7 +904,7 @@ var countryToCity = getCities();</code></pre><p>关于var和可读性间的权�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck1vxeiw9000docw1pn6372xo" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/14/java 10的类型推导/" data-id="ck3jwi95e000dz4w1sg12demi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -810,7 +973,7 @@ server:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck1vxeivy0009ocw1q401tni9" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/09/07/profile介绍/" data-id="ck3jwi94p0007z4w17jm3mi5z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -891,7 +1054,7 @@ spring.jackson.time-zone=GMT+8spring.jackson.default-property-inclusion=NON_NULL
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck1vxeivf0000ocw1sge5o33g" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/30/RabbitMQ消息中间件/" data-id="ck3jwi93x0000z4w1c9k4vmj4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -975,7 +1138,7 @@ VALUES (3, &apos;Modern Enterprise Software&apos;, 999.99);</code></pre><p>上�
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck1vxeivx0008ocw16bjb0m30" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/23/sql技巧/" data-id="ck3jwi94s0008z4w1wpyd0sgi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1203,247 +1366,7 @@ Output : Arriving at : Jan 14 2014 04:33 PM</code></pre><p>可以看到，当前
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck1vxeiwl000focw1m057mi2v" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ThreadLocal原理分析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/my-blog/2019/08/09/ThreadLocal原理分析/" class="article-date">
-  <time datetime="2019-08-09T05:40:29.000Z" itemprop="datePublished">2019-08-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/my-blog/2019/08/09/ThreadLocal原理分析/">ThreadLocal原理分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>早在JDK 1.2的版本中就提供java.lang.ThreadLocal，ThreadLocal为解决多线程程序的并发问题提供了一种新的思路。使用这个工具类可以很简洁地编写出优美的多线程程序。当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。从线程的角度看，目标变量就象是线程的本地变量，这也是类名中“Local”所要表达的意思。所以，在Java中编写线程局部变量的代码相对来说要笨拙一些，因此造成线程局部变量没有在Java开发者中得到很好的普及。人们常说，锁是一种以时间换空间的机制，而ThreadLocal正好是以空间换时间的。</p>
-<h3 id="和锁的比较"><a href="#和锁的比较" class="headerlink" title="和锁的比较"></a>和锁的比较</h3><p>为什么要先强调这一点，因为从简介上看，容易使人们联想到ThreadLocal似乎是一种解决Java多线程环境中线程同步与线程安全方法，其实不然，这里要设计到两个概念：线程安全，线程同步，事实上，ThreadLocal只解决线程安全的问题，并不能解决线程同步的问题，这也造成在刚学习的时候，我总是在苦想，ThreadLocal既然为每个线程拷贝一份变量，那怎么再进行同步呢？查了很多资料后才想明白，ThreadLocal并不是用来解决线程同步的，所以它与锁可以说是没有什么关系的，彼此各有所长，不能代替。有人这样描述：ThreadLocal解决的是同一个线程内的资源共享问题，而synchronized 解决的是多个线程间的资源共享问题，我觉得是有道理的！</p>
-<h4 id="ThreadLocal类接口很简单，只有4个方法，我们先来了解一下："><a href="#ThreadLocal类接口很简单，只有4个方法，我们先来了解一下：" class="headerlink" title="ThreadLocal类接口很简单，只有4个方法，我们先来了解一下："></a>ThreadLocal类接口很简单，只有4个方法，我们先来了解一下：</h4><pre><code>void set(T value)设置当前线程的线程局部变量的值。
-public T get()该方法返回当前线程所对应的线程局部变量。
-public void remove()将当前线程局部变量的值删除，目的是为了减少内存的占用，该方法是JDK 5.0新增的方法。需要指出的是，当线程结束后，对应该线程的局部变量将自动被垃圾回收，所以显式调用该方法清除线程的局部变量并不是必须的操作，但它可以加快内存回收的速度。
-protected T initialValue()返回该线程局部变量的初始值，该方法是一个protected的方法，显然是为了让子类覆盖而设计的。这个方法是一个延迟调用方法，在线程第1次调用get()或set(T value)时才执行，并且仅执行1次。ThreadLocal中的缺省实现直接返回一个null</code></pre><p>值得一提的是，在JDK5.0中，ThreadLocal已经支持泛型，该类的类名已经变为ThreadLocal<t>。API方法也相应进行了调整，新版本的API方法分别是void set(T value)、T get()以及T initialValue()。ThreadLocal是如何做到为每一个线程维护变量的副本的呢？其实实现的思路很简单：在ThreadLocal类中有一个Map，用于存储每一个线程的变量副本，Map中元素的键为线程对象，而值对应线程的变量副本。我们自己就可以提供一个简单的实现版本：</t></p>
-<pre><code>package com.test;
-
-public class TestNum {
-    // ①通过匿名内部类覆盖ThreadLocal的initialValue()方法，指定初始值
-    private static ThreadLocal&lt;Integer&gt; seqNum = new ThreadLocal&lt;Integer&gt;() {
-        public Integer initialValue() {
-            return 0;
-        }
-    };
-
-    // ②获取下一个序列值
-    public int getNextNum() {
-        seqNum.set(seqNum.get() + 1);
-        return seqNum.get();
-    }
-
-    public static void main(String[] args) {
-        TestNum sn = new TestNum();
-        // ③ 3个线程共享sn，各自产生序列号
-        TestClient t1 = new TestClient(sn);
-        TestClient t2 = new TestClient(sn);
-        TestClient t3 = new TestClient(sn);
-        t1.start();
-        t2.start();
-        t3.start();
-    }
-
-    private static class TestClient extends Thread {
-        private TestNum sn;
-
-        public TestClient(TestNum sn) {
-            this.sn = sn;
-        }
-
-        public void run() {
-            for (int i = 0; i &lt; 3; i++) {
-                // ④每个线程打出3个序列值
-                System.out.println(&quot;thread[&quot; + Thread.currentThread().getName() + &quot;] --&gt; sn[&quot;
-                         + sn.getNextNum() + &quot;]&quot;);
-            }
-        }
-    }
-}</code></pre><p>通常我们通过匿名内部类的方式定义ThreadLocal的子类，提供初始的变量值，如例子中①处所示。TestClient线程产生一组序列号，在③处，我们生成3个TestClient，它们共享同一个TestNum实例。运行以上代码，在控制台上输出以下的结果：</p>
-<pre><code>thread[Thread-0] --&gt; sn[1]
-thread[Thread-1] --&gt; sn[1]
-thread[Thread-2] --&gt; sn[1]
-thread[Thread-1] --&gt; sn[2]
-thread[Thread-0] --&gt; sn[2]
-thread[Thread-1] --&gt; sn[3]
-thread[Thread-2] --&gt; sn[2]
-thread[Thread-0] --&gt; sn[3]
-thread[Thread-2] --&gt; sn[3]</code></pre><p>考察输出的结果信息，我们发现每个线程所产生的序号虽然都共享同一个TestNum实例，但它们并没有发生相互干扰的情况，而是各自产生独立的序列号，这是因为我们通过ThreadLocal为每一个线程提供了单独的副本。</p>
-<h3 id="Thread同步机制的比较"><a href="#Thread同步机制的比较" class="headerlink" title="Thread同步机制的比较"></a>Thread同步机制的比较</h3><p> ThreadLocal和线程同步机制相比有什么优势呢？ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。在同步机制中，通过对象的锁机制保证同一时间只有一个线程访问变量。这时该变量是多个线程共享的，使用同步机制要求程序慎密地分析什么时候对变量进行读写，什么时候需要锁定某个对象，什么时候释放对象锁等繁杂的问题，程序设计和编写难度相对较大。而ThreadLocal则从另一个角度来解决多线程的并发访问。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。ThreadLocal提供了线程安全的共享对象，在编写多线程代码时，可以把不安全的变量封装进ThreadLocal。由于ThreadLocal中可以持有任何类型的对象，低版本JDK所提供的get()返回的是Object对象，需要强制类型转换。但JDK 5.0通过泛型很好的解决了这个问题，在一定程度地简化ThreadLocal的使用。</p>
-<p>同一线程贯通三层这样你就可以根据需要，将一些非线程安全的变量以ThreadLocal存放，在同一次请求响应的调用线程中，所有关联的对象引用到的都是同一个变量。下面的实例能够体现Spring对有状态Bean的改造思路：代码清单3 TestDao：非线程安全</p>
-<pre><code>package com.test;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class TestDao {
-    private Connection conn;// ①一个非线程安全的变量
-
-    public void addTopic() throws SQLException {
-        Statement stat = conn.createStatement();// ②引用非线程安全变量
-        // …
-    }
-}</code></pre><p>由于①处的conn是成员变量，因为addTopic()方法是非线程安全的，必须在使用时创建一个新TopicDao实例（非singleton）。下面使用ThreadLocal对conn这个非线程安全的“状态”进行改造：代码清单4 TestDao：线程安全</p>
-<pre><code>package com.test;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class TestDaoNew {
-    // ①使用ThreadLocal保存Connection变量
-    private static ThreadLocal&lt;Connection&gt; connThreadLocal = new ThreadLocal&lt;Connection&gt;();
-
-    public static Connection getConnection() {
-        // ②如果connThreadLocal没有本线程对应的Connection创建一个新的Connection，
-        // 并将其保存到线程本地变量中。
-        if (connThreadLocal.get() == null) {
-            Connection conn = getConnection();
-            connThreadLocal.set(conn);
-            return conn;
-        } else {
-            return connThreadLocal.get();// ③直接返回线程本地变量
-        }
-    }
-
-    public void addTopic() throws SQLException {
-        // ④从ThreadLocal中获取线程对应的Connection
-        Statement stat = getConnection().createStatement();
-    }
-}</code></pre><p>不同的线程在使用TopicDao时，先判断connThreadLocal.get()是否是null，如果是null，则说明当前线程还没有对应的Connection对象，这时创建一个Connection对象并添加到本地线程变量中；如果不为null，则说明当前的线程已经拥有了Connection对象，直接使用就可以了。这样，就保证了不同的线程使用线程相关的Connection，而不会使用其它线程的Connection。因此，这个TopicDao就可以做到singleton共享了。当然，这个例子本身很粗糙，将Connection的ThreadLocal直接放在DAO只能做到本DAO的多个方法共享Connection时不发生线程安全问题，但无法和其它DAO共用同一个Connection，要做到同一事务多DAO共享同一Connection，必须在一个共同的外部类使用ThreadLocal保存Connection。ConnectionManager.java</p>
-<pre><code>package com.test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class ConnectionManager {
-
-    private static ThreadLocal&lt;Connection&gt; connectionHolder = new ThreadLocal&lt;Connection&gt;() {
-        @Override
-        protected Connection initialValue() {
-            Connection conn = null;
-            try {
-                conn = DriverManager.getConnection(
-                        &quot;jdbc:mysql://localhost:3306/test&quot;, &quot;username&quot;,
-                        &quot;password&quot;);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return conn;
-        }
-    };
-
-    public static Connection getConnection() {
-        return connectionHolder.get();
-    }
-
-    public static void setConnection(Connection conn) {
-        connectionHolder.set(conn);
-    }
-}</code></pre><h3 id="ThreadLocal-lt-T-gt"><a href="#ThreadLocal-lt-T-gt" class="headerlink" title="ThreadLocal&lt;T&gt;"></a>ThreadLocal&lt;T&gt;</h3><p>那么到底ThreadLocal类是如何实现这种“为每个线程提供不同的变量拷贝”的呢？先来看一下ThreadLocal的set()方法的源码是如何实现的：</p>
-<pre><code>/**
-     * Sets the current thread&apos;s copy of this thread-local variable
-     * to the specified value.  Most subclasses will have no need to
-     * override this method, relying solely on the {@link #initialValue}
-     * method to set the values of thread-locals.
-     *
-     * @param value the value to be stored in the current thread&apos;s copy of
-     *        this thread-local.
-     */
-    public void set(T value) {
-        Thread t = Thread.currentThread();
-        ThreadLocalMap map = getMap(t);
-        if (map != null)
-            map.set(this, value);
-        else
-            createMap(t, value);
-    }</code></pre><p>在这个方法内部我们看到，首先通过getMap(Thread t)方法获取一个和当前线程相关的ThreadLocalMap，然后将变量的值设置到这个ThreadLocalMap对象中，当然如果获取到的ThreadLocalMap对象为空，就通过createMap方法创建。线程隔离的秘密，就在于ThreadLocalMap这个类。ThreadLocalMap是ThreadLocal类的一个静态内部类，它实现了键值对的设置和获取（对比Map对象来理解），每个线程中都有一个独立的ThreadLocalMap副本，它所存储的值，只能被当前线程读取和修改。ThreadLocal类通过操作每一个线程特有的ThreadLocalMap副本，从而实现了变量访问在不同线程中的隔离。因为每个线程的变量都是自己特有的，完全不会有并发错误。还有一点就是，ThreadLocalMap存储的键值对中的键是this对象指向的ThreadLocal对象，而值就是你所设置的对象了。为了加深理解，我们接着看上面代码中出现的getMap和createMap方法的实现：</p>
-<pre><code>/**
- * Get the map associated with a ThreadLocal. Overridden in
- * InheritableThreadLocal.
- *
- * @param  t the current thread
- * @return the map
- */
-ThreadLocalMap getMap(Thread t) {
-    return t.threadLocals;
-}
-
-/**
- * Create the map associated with a ThreadLocal. Overridden in
- * InheritableThreadLocal.
- *
- * @param t the current thread
- * @param firstValue value for the initial entry of the map
- * @param map the map to store.
- */
-void createMap(Thread t, T firstValue) {
-    t.threadLocals = new ThreadLocalMap(this, firstValue);
-}</code></pre><p>接下来再看一下ThreadLocal类中的get()方法:</p>
-<pre><code>/**
- * Returns the value in the current thread&apos;s copy of this
- * thread-local variable.  If the variable has no value for the
- * current thread, it is first initialized to the value returned
- * by an invocation of the {@link #initialValue} method.
- *
- * @return the current thread&apos;s value of this thread-local
- */
-public T get() {
-    Thread t = Thread.currentThread();
-    ThreadLocalMap map = getMap(t);
-    if (map != null) {
-        ThreadLocalMap.Entry e = map.getEntry(this);
-        if (e != null)
-            return (T)e.value;
-    }
-    return setInitialValue();
-}</code></pre><p>再来看setInitialValue()方法：</p>
-<pre><code>/**
-    * Variant of set() to establish initialValue. Used instead
-    * of set() in case user has overridden the set() method.
-    *
-    * @return the initial value
-    */
-   private T setInitialValue() {
-       T value = initialValue();
-       Thread t = Thread.currentThread();
-       ThreadLocalMap map = getMap(t);
-       if (map != null)
-           map.set(this, value);
-       else
-           createMap(t, value);
-       return value;
-   }</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://leilei666.github.io/my-blog/2019/08/09/ThreadLocal原理分析/" data-id="ck1vxeiw8000cocw19hvrdqvq" class="article-share-link">Share</a>
+      <a data-url="https://leilei666.github.io/my-blog/2019/08/16/Java-8新的时间日期库的20个使用实例/" data-id="ck3jwi95j000gz4w1dqsjwjq4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1476,7 +1399,7 @@ public T get() {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
     </div>
   </div>
 
@@ -1487,6 +1410,10 @@ public T get() {
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/my-blog/2019/11/29/springboot定时任务执行/">springboot定时任务执行</a>
+          </li>
         
           <li>
             <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/">Freemarker的基本语法及入门基础</a>
@@ -1502,10 +1429,6 @@ public T get() {
         
           <li>
             <a href="/my-blog/2019/09/20/java开发必会的linux命令/">java开发必会的linux命令</a>
-          </li>
-        
-          <li>
-            <a href="/my-blog/2019/09/14/java 10的类型推导/">java 10的类型推导</a>
           </li>
         
       </ul>

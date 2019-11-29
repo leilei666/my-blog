@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>springboot定时任务执行 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一.定时任务实现的几种方式：1.Timer：这是java自带的java.util.Timer类，这个类允许你调度一个java.util.TimerTask任务。使用这种方式可以让你的程序按照某一个频度执行，但不能在指定时间运行。一般用的较少。2.ScheduledExecutorService：也jdk自带的一个类；是基于线程池设计的定时任务类,每个调度任务都会分配到线程池中的一个线程去执行,也就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot定时任务执行">
+<meta property="og:url" content="https://leilei666.github.io/my-blog/2019/11/29/springboot定时任务执行/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.定时任务实现的几种方式：1.Timer：这是java自带的java.util.Timer类，这个类允许你调度一个java.util.TimerTask任务。使用这种方式可以让你的程序按照某一个频度执行，但不能在指定时间运行。一般用的较少。2.ScheduledExecutorService：也jdk自带的一个类；是基于线程池设计的定时任务类,每个调度任务都会分配到线程池中的一个线程去执行,也就">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-11-29T08:41:45.489Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springboot定时任务执行">
+<meta name="twitter:description" content="一.定时任务实现的几种方式：1.Timer：这是java自带的java.util.Timer类，这个类允许你调度一个java.util.TimerTask任务。使用这种方式可以让你的程序按照某一个频度执行，但不能在指定时间运行。一般用的较少。2.ScheduledExecutorService：也jdk自带的一个类；是基于线程池设计的定时任务类,每个调度任务都会分配到线程池中的一个线程去执行,也就">
+  
+    <link rel="alternate" href="/my-blog/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/my-blog/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/my-blog/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/my-blog/">Home</a>
+        
+          <a class="main-nav-link" href="/my-blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/my-blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://leilei666.github.io/my-blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springboot定时任务执行" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/my-blog/2019/11/29/springboot定时任务执行/" class="article-date">
+  <time datetime="2019-11-29T08:26:16.000Z" itemprop="datePublished">2019-11-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springboot定时任务执行
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-定时任务实现的几种方式："><a href="#一-定时任务实现的几种方式：" class="headerlink" title="一.定时任务实现的几种方式："></a>一.定时任务实现的几种方式：</h2><p>1.Timer：这是java自带的java.util.Timer类，这个类允许你调度一个java.util.TimerTask任务。使用这种方式可以让你的程序按照某一个频度执行，但不能在指定时间运行。一般用的较少。<br>2.ScheduledExecutorService：也jdk自带的一个类；是基于线程池设计的定时任务类,每个调度任务都会分配到线程池中的一个线程去执行,也就是说,任务是并发执行,互不影响。<br>3.Spring Task：Spring3.0以后自带的task，可以将它看成一个轻量级的Quartz，而且使用起来比Quartz简单许多。<br>4.Quartz：这是一个功能比较强大的的调度器，可以让你的程序在指定时间执行，也可以按照某一个频度执行，配置起来稍显复杂。</p>
+<h2 id="二-使用Spring-Task"><a href="#二-使用Spring-Task" class="headerlink" title="二.使用Spring Task"></a>二.使用Spring Task</h2><p>1.创建任务类</p>
+<pre><code> 1 @Slf4j
+ 2 @Component
+ 3 public class ScheduledService {
+ 4     @Scheduled(cron = &quot;0/5 * * * * *&quot;)
+ 5     public void scheduled(){
+ 6         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;使用cron  {}&quot;,System.currentTimeMillis());
+ 7     }
+ 8     @Scheduled(fixedRate = 5000)
+ 9     public void scheduled1() {
+10         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;使用fixedRate{}&quot;, System.currentTimeMillis());
+11     }
+12     @Scheduled(fixedDelay = 5000)
+13     public void scheduled2() {
+14         log.info(&quot;=====&gt;&gt;&gt;&gt;&gt;fixedDelay{}&quot;,System.currentTimeMillis());
+15     }
+16 }</code></pre><p>2.在主类上使用@EnableScheduling注解开启对定时任务的支持，然后启动项目创建任务类</p>
+<pre><code> 1 import org.springframework.boot.SpringApplication;
+ 2 import org.springframework.boot.autoconfigure.SpringBootApplication;
+ 3 import org.springframework.scheduling.annotation.EnableScheduling;
+ 4 
+ 5 @SpringBootApplication
+ 6 @EnableScheduling
+ 7 public class SpringBootScheduledApplication {
+ 8 
+ 9     public static void main(String[] args) {
+10         SpringApplication.run(SpringBootScheduledApplication.class, args);
+11     }</code></pre><p>3.多线程执行</p>
+<p>在传统的Spring项目中，我们可以在xml配置文件添加task的配置，而在SpringBoot项目中一般使用config配置类的方式添加配置，所以新建一个AsyncConfig类</p>
+<pre><code> 1 @Configuration
+ 2 @EnableAsync
+ 3 public class AsyncConfig {
+ 4 /*
+ 5 此处成员变量应该使用@Value从配置中读取
+ 6 */
+ 7 private int corePoolSize = 10;
+ 8 private int maxPoolSize = 200;
+ 9 private int queueCapacity = 10;
+10 @Bean
+11 public Executor taskExecutor() {
+12 ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+13 executor.setCorePoolSize(corePoolSize);
+14 executor.setMaxPoolSize(maxPoolSize);
+15 executor.setQueueCapacity(queueCapacity);
+16 executor.initialize();
+17 return executor;
+18 }
+19 }</code></pre><p>@Configuration：表明该类是一个配置类 </p>
+<p>@EnableAsync：开启异步事件的支持</p>
+<p>然后在定时任务的类或者方法上添加@Async 。最后重启项目，每一个任务都是在不同的线程中</p>
+<p>4.执行时间的配置</p>
+<p>在上面的定时任务中，我们在方法上使用@Scheduled注解来设置任务的执行时间，并且使用三种属性配置方式：</p>
+<pre><code>fixedRate：定义一个按一定频率执行的定时任务
+fixedDelay：定义一个按一定频率执行的定时任务，与上面不同的是，改属性可以配合initialDelay， 定义该任务延迟执行时间。
+cron：通过表达式来配置任务执行时间</code></pre><p>5.cron表达式详解</p>
+<p>一个cron表达式有至少6个（也可能7个）有空格分隔的时间元素。按顺序依次为：</p>
+<pre><code>秒（0~59）
+分钟（0~59）
+3 小时（0~23）
+4 天（0~31）
+5 月（0~11）
+6 星期（1~7 1=SUN 或 SUN，MON，TUE，WED，THU，FRI，SAT）
+年份（1970－2099）</code></pre><p>其中每个元素可以是一个值(如6),一个连续区间(9-12),一个间隔时间(8-18/4)(/表示每隔4小时),一个列表(1,3,5),通配符。由于”月份中的日期”和”星期中的日期”这两个元素互斥的,必须要对其中一个设置。配置实例：</p>
+<pre><code>每隔5秒执行一次：/5 * ?
+每隔1分钟执行一次：0 /1 ?
+0 0 10,14,16 ? 每天上午10点，下午2点，4点
+0 0/30 9-17 ? 朝九晚五工作时间内每半小时
+0 0 12 ? * WED 表示每个星期三中午12点
+“0 0 12 ?” 每天中午12点触发
+“0 15 10 ? “ 每天上午10:15触发
+“0 15 10 ?” 每天上午10:15触发
+“0 15 10 ? *” 每天上午10:15触发
+“0 15 10 ? 2005” 2005年的每天上午10:15触发
+“0 14 * ?” 在每天下午2点到下午2:59期间的每1分钟触发
+“0 0/5 14 ?” 在每天下午2点到下午2:55期间的每5分钟触发
+“0 0/5 14,18 ?” 在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发
+“0 0-5 14 ?” 在每天下午2点到下午2:05期间的每1分钟触发
+“0 10,44 14 ? 3 WED” 每年三月的星期三的下午2:10和2:44触发
+“0 15 10 ? * MON-FRI” 周一至周五的上午10:15触发
+“0 15 10 15 * ?” 每月15日上午10:15触发
+“0 15 10 L * ?” 每月最后一日的上午10:15触发
+“0 15 10 ? * 6L” 每月的最后一个星期五上午10:15触发
+“0 15 10 ? * 6L 2002-2005” 2002年至2005年的每月的最后一个星期五上午10:15触发
+“0 15 10 ? * 6#3” 每月的第三个星期五上午10:15触发</code></pre><h2 id="三-整合Quartz"><a href="#三-整合Quartz" class="headerlink" title="三.整合Quartz"></a>三.整合Quartz</h2><p>1.添加依赖<br>如果SpringBoot版本是2.0.0以后的，则在spring-boot-starter中已经包含了quart的依赖，则可以直接使用spring-boot-starter-quartz依赖：</p>
+<pre><code>1 &lt;dependency&gt;
+2     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+3     &lt;artifactId&gt;spring-boot-starter-quartz&lt;/artifactId&gt;
+4 &lt;/dependency&gt;</code></pre><p>如果是1.5.9则要使用以下添加依赖：</p>
+<pre><code>1 &lt;dependency&gt;
+2   &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+3   &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+4   &lt;version&gt;2.3.0&lt;/version&gt;
+5 &lt;/dependency&gt;
+6 &lt;dependency&gt;
+7   &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+8   &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
+9 &lt;/dependency&gt;</code></pre><p>2.创建任务类TestQuartz，该类主要是继承了QuartzJobBean</p>
+<pre><code> 1 public class TestQuartz extends QuartzJobBean {
+ 2     /**
+ 3      * 执行定时任务
+ 4      * @param jobExecutionContext
+ 5      * @throws JobExecutionException
+ 6      */
+ 7     @Override
+ 8     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+ 9         System.out.println(&quot;quartz task &quot;+new Date());
+10     }
+11 }</code></pre><p>3.创建配置类QuartzConfig</p>
+<pre><code> 1 @Configuration
+ 2 public class QuartzConfig {
+ 3     @Bean
+ 4     public JobDetail teatQuartzDetail(){
+ 5         return JobBuilder.newJob(TestQuartz.class).withIdentity(&quot;testQuartz&quot;).storeDurably().build();
+ 6     }
+ 7 
+ 8     @Bean
+ 9     public Trigger testQuartzTrigger(){
+10         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+11                 .withIntervalInSeconds(10)  //设置时间周期单位秒
+12                 .repeatForever();
+13         return TriggerBuilder.newTrigger().forJob(teatQuartzDetail())
+14                 .withIdentity(&quot;testQuartz&quot;)
+15                 .withSchedule(scheduleBuilder)
+16                 .build();
+17     }
+18 }</code></pre><p>4.启动项目</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://leilei666.github.io/my-blog/2019/11/29/springboot定时任务执行/" data-id="ck3jwi94g0005z4w12cg1e3dl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Freemarker的基本语法及入门基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/my-blog/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/my-blog/2019/11/29/springboot定时任务执行/">springboot定时任务执行</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/10/18/Freemarker的基本语法及入门基础/">Freemarker的基本语法及入门基础</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/10/12/java原子类及内部原理/">java原子类及内部原理</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/09/27/git命令/">git命令</a>
+          </li>
+        
+          <li>
+            <a href="/my-blog/2019/09/20/java开发必会的linux命令/">java开发必会的linux命令</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/my-blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/my-blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/my-blog/fancybox/jquery.fancybox.css">
+  <script src="/my-blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/my-blog/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
